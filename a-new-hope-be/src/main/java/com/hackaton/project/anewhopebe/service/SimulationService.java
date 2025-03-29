@@ -13,9 +13,7 @@ public class SimulationService {
     private PopulationService populationService;
 
     public SimulationInfo getSimulationInfo() {
-        SimulationInfo simulationInfo = simulateDay();
-        //simulationInfo.setResources(resourcesStorage.resources);
-        return simulationInfo;
+        return simulateDay();
     }
 
     private SimulationInfo simulateDay() {
@@ -24,11 +22,6 @@ public class SimulationService {
         populationService.decreasePopulation(deathsFromStarvation);
         final long births = populationService.births();
 
-
-        // calculate new born based on birth rate, etc
-        // calculate new deaths from natural causes
-        // update population
-        // currPop - deaths) * birthRate
         return new SimulationInfo(populationService.getNumberOfPeople(),
                 populationService.resourcesStorage.getResources(),
                 deathsFromNaturalCauses,
@@ -37,8 +30,6 @@ public class SimulationService {
     }
 
     public void addRocketDeliveryResources(Map<String, Long> deliveredResources) {
-        populationService.resourcesStorage.addDeliveryResources(deliveredResources);
+        populationService.addDeliveryResources(deliveredResources);
     }
-
-
 }

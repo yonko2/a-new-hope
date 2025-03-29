@@ -2,9 +2,9 @@ package com.hackaton.project.anewhopebe.data;
 
 public abstract class Resource {
 
-    private long consumptionPerPersonForADay;
-    private String name;
-    private double daysTillDeath;
+    private final long consumptionPerPersonForADay;
+    private final String name;
+    private final double daysTillDeath;
     private long volume;
 
     public Resource(long consumptionPerPersonForADay, String name, double daysTillDeath, long volume) {
@@ -20,10 +20,6 @@ public abstract class Resource {
 
     public double getDaysTillDeath() {
         return daysTillDeath;
-    }
-
-    public long getVolume() {
-        return volume;
     }
 
     // number of people with deficiency
@@ -42,7 +38,6 @@ public abstract class Resource {
         final long peopleInDeficiency = numberOfPeopleToFeed - (this.volume / consumptionPerPersonForADay);
         this.volume %= consumptionPerPersonForADay;
         return peopleInDeficiency;
-
     }
 
     public void increaseVolume(long volume) {
