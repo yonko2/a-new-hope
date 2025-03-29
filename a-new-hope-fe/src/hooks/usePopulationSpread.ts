@@ -5,8 +5,8 @@ export interface Dot {
   lon: number;
 }
 
-const MIN_LATITUDE = -70;
-const MAX_LATITUDE = 70;
+const MIN_LATITUDE = -80;
+const MAX_LATITUDE = 80;
 
 const randomLatitude = () => {
   return Math.random() * (MAX_LATITUDE - MIN_LATITUDE) + MIN_LATITUDE;
