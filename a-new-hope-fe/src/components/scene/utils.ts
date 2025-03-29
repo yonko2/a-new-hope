@@ -11,83 +11,70 @@ const latLongToCartesian = (lat: number, lon: number, radius: number) => {
     return [x, y, z]
 }
 
-interface SendCurvedArrowOptions {
-    color?: string | number;
-    duration?: number;
-    delay?: number;
-    segments?: number;
-    tubeRadius?: number;
-}
+const COLOR = "yellow";
+const DURATION = 2;
+const DELAY = 3;
+const SEGMENTS = 64;
+const TUBE_RADIUS = 0.5;
 
 export function sendCurvedArrow(
-    scene: THREE.Scene,
+    scene: THREE.Scene | null,
     earthCenter: THREE.Vector3,
     marsCenter: THREE.Vector3,
-    earthRadius: number,
-    marsRadius: number,
-    options: SendCurvedArrowOptions = {}
+    fromPercent: number,
+    toPercent: number,
 ) {
-    const {
-        color = "yellow",
-        delay = 1,
-        segments = 64,
-        tubeRadius = 0.5,
-    } = options;
 
-    const randomEarthLat = Math.random() * 180 - 90;
-    const randomEarthLon = Math.random() * 360 - 180;
-    const randomMarsLat = Math.random() * 180 - 90;
-    const randomMarsLon = Math.random() * 360 - 180;
+    if (!scene) return;
 
-    const earthOffsetArr = latLongToCartesian(randomEarthLat, randomEarthLon, earthRadius);
-    const marsOffsetArr = latLongToCartesian(randomMarsLat, randomMarsLon, marsRadius);
+    let start: THREE.Vector3, end: THREE.Vector3;
+    start = earthCenter.clone().lerp(marsCenter, fromPercent);
+    end = earthCenter.clone().lerp(marsCenter, toPercent);
 
-    const earthOffset = new THREE.Vector3(...earthOffsetArr);
-    const marsOffset = new THREE.Vector3(...marsOffsetArr);
-
-    // Calculate start and end points on the surfaces.
-    const start = earthCenter.clone().add(earthOffset);
-    const end = marsCenter.clone().add(marsOffset);
-
-    // Calculate a midpoint and add a random offset for a curved path.
-    const mid = new THREE.Vector3().lerpVectors(start, end, 0.5);
-    const distance = start.distanceTo(end);
+    const mid = start.clone().lerp(end, 0.5);
+    const segmentDistance = start.distanceTo(end);
     const randomOffset = new THREE.Vector3(
-        (Math.random() - 0.5) * distance * 0.5,
-        (Math.random() - 0.5) * distance * 0.5,
-        (Math.random() - 0.5) * distance * 0.5
+        (Math.random() - 0.5) * segmentDistance * 0.5,
+        (Math.random() - 0.5) * segmentDistance * 0.5,
+        (Math.random() - 0.5) * segmentDistance * 0.5
     );
     mid.add(randomOffset);
 
     const curve = new CatmullRomCurve3([start, mid, end]);
 
-    const tubeGeometry = new TubeGeometry(curve, segments, tubeRadius, 8, false);
+    // Create a tube geometry along the curve.
+    const tubeGeometry = new TubeGeometry(curve, SEGMENTS, TUBE_RADIUS, 8, false);
 
+    // Create a standard material (fully opaque).
     const material = new MeshStandardMaterial({
-        color,
+        color: COLOR,
         transparent: true,
         opacity: 1,
     });
 
+    // Create the mesh for the arrow and add it to the scene.
     const arrowMesh = new Mesh(tubeGeometry, material);
     scene.add(arrowMesh);
 
-    const fullCount = tubeGeometry.index ? tubeGeometry.index.count : tubeGeometry.attributes.position.count;
+    // Animate the arrow drawing by animating the draw range of the geometry.
+    const fullCount = tubeGeometry.index
+        ? tubeGeometry.index.count
+        : tubeGeometry.attributes.position.count;
+
     // Start by drawing nothing.
     tubeGeometry.setDrawRange(0, 0);
 
     gsap.to({ count: 0 }, {
         count: fullCount,
-        duration: 2,
+        duration: DURATION,
         ease: "power1.out",
         onUpdate: function () {
-            // this.targets()[0].count holds the current animated count.
             const currentCount = this.targets()[0].count;
             tubeGeometry.setDrawRange(0, currentCount);
         },
         onComplete: () => {
             // Once the arrow is fully drawn, wait for a delay then remove it.
-            gsap.delayedCall(delay, () => {
+            gsap.delayedCall(DELAY, () => {
                 scene.remove(arrowMesh);
                 tubeGeometry.dispose();
                 material.dispose();

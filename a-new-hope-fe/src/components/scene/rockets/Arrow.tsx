@@ -1,36 +1,26 @@
 import * as THREE from "three";
 import {sendCurvedArrow} from "../utils";
-import {Scene} from "three"; // Adjust path accordingly
 
-// Define your planet sizes (or import these constants)
-const MARS_SIZE = 50;
-const EARTH_SIZE = 50;
-
-interface ArrowButtonProps {
-    sceneRef?: Scene | null
+interface IProps {
+    scene: THREE.Scene | null;
+    earthCenter: THREE.Vector3;
+    marsCenter: THREE.Vector3;
+    fromPercent: number;
+    toPercent: number;
+    direction: 'toMars' | 'toEarth';
 }
 
-const ArrowButton = (props: ArrowButtonProps) => {
-    const {sceneRef} = props;
-    if (!sceneRef) return;
+const ArrowButton = (props: IProps) => {
+    const {scene, earthCenter, marsCenter, fromPercent, toPercent} = props;
+    if (!scene) return;
 
-    // Define centers for Earth and Mars
-    const earthCenter = new THREE.Vector3(EARTH_SIZE * 4, 0, 0); // Earth is at [200, 0, 0]
-    const marsCenter = new THREE.Vector3(0, 0, 0); // Mars is at the origin
-
-    // When the button is clicked, call the function with options.
     const handleClick = () => {
         sendCurvedArrow(
-            sceneRef,
+            scene,
             earthCenter,
             marsCenter,
-            EARTH_SIZE,
-            MARS_SIZE,
-            {
-                color: "yellow",
-                duration: 3,
-                delay: 1,
-            }
+            fromPercent,
+            toPercent,
         );
     };
 

@@ -86,6 +86,9 @@ const SpaceScene = () => {
         controlsRef.current.update();
     };
 
+    const earthCenter = new THREE.Vector3(EARTH_SIZE * 4, 0, 0); // Earth is at [200, 0, 0]
+    const marsCenter = new THREE.Vector3(0, 0, 0);
+
     return (
         <>
             <button
@@ -99,7 +102,15 @@ const SpaceScene = () => {
             >
                 {mapMode ? "Switch to Orbit Mode" : "Switch to Map Mode"}
             </button>
-            {mapMode && <ArrowButton sceneRef={sceneRef} />}
+            {mapMode &&
+                <ArrowButton
+                    scene={sceneRef}
+                    earthCenter={earthCenter}
+                    marsCenter={marsCenter}
+                    fromPercent={0.5}
+                    toPercent={1}
+                    direction={'toEarth'}
+                />}
             <div style={{ width: "1000px", height: "1000px" }}>
                 <Canvas
                     camera={{ position: [0, 0, 150], fov: 50, near: 0.1, far: 10000 }}
