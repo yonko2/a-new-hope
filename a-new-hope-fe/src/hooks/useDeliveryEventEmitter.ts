@@ -15,8 +15,6 @@ export function useDeliveryEventEmitter() {
     (state) => state.updateDaysTillNextRocket
   );
 
-  console.log('daysTillNextRocket', daysTillNextRocket)
-
   useEffect(() => {
     if (daysTillNextRocket === 0) {
       sendRocket();

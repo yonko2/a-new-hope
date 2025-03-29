@@ -8,8 +8,6 @@ export function useDeliveryUpdater() {
   const progress = useDeliveryStore((state) => state.progress);
   const updateProgress = useDeliveryStore((state) => state.updateProgress);
 
-  console.log(progress);
-
   useEffect(() => {
     if (progress !== undefined) {
       updateProgress();

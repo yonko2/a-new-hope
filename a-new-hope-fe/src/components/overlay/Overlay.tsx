@@ -5,6 +5,7 @@ import { Time } from "./Time";
 import "../../styles/Overlay.css";
 import { Population } from "./Population";
 import { useTimeStore } from "../../stores/timeStore";
+import { useSceneStore } from "../../stores/sceneStore";
 
 export const Overlay = memo(function Overlay() {
   const isPaused = useTimeStore((state) => state.isPaused);
@@ -12,11 +13,25 @@ export const Overlay = memo(function Overlay() {
   const startStop = useTimeStore((state) => state.startStop);
   const setSpeed = useTimeStore((state) => state.setSpeed);
 
+  const mapMode = useSceneStore((state) => state.mapMode);
+  const switchMapMode = useSceneStore((state) => state.switchMapMode);
+  const isRunningAnimation = useSceneStore((state) => state.isRunningAnimation);
+
   return (
     <div className="overlay">
       {/* <DeliveryMenu /> */}
       <div className="header">
-        <div className="spacer" />
+        <div className="map-mode-button-container">
+          <button
+            disabled={isRunningAnimation}
+            className="switch-map-mode-button container"
+            onClick={switchMapMode}
+          >
+            {mapMode === "plane"
+              ? "Switch to Orbit Mode"
+              : "Switch to Map Mode"}
+          </button>
+        </div>
         <div className="header-center">
           <Resources />
           <Population />

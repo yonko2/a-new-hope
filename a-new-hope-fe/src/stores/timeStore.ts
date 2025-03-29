@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-type TimeRate = number
+type TimeRate = number;
 
 type TimeStore = {
   daysElapsed: number;

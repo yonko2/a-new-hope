@@ -12,7 +12,7 @@ export const Time = memo(function Time() {
 
   return (
     <div className="container time">
-      <span>{startDate.toDateString()}</span>
+      <span>{startDate.toISOString().split("T")[0]}</span>
     </div>
   );
 });

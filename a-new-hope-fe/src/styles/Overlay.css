@@ -1,13 +1,15 @@
 .overlay {
   width: 100vw;
-  height: 100vh;
+  /* height: 100vh; */
   display: flex;
+  /* position: absolute; */
 }
 
 .header {
   position: absolute;
   top: 0;
   display: flex;
+  justify-content: space-between;
   width: 100%;
   gap: 2.5%;
 }
@@ -54,12 +56,14 @@
 
 .time {
   display: flex;
+  width: 10%;
   height: 64px;
   border-radius: 0;
   border-bottom-left-radius: 80px;
   padding-left: 80px;
 
   justify-content: end;
+  /* margin-left: auto; */
   align-items: center;
 }
 
@@ -114,6 +118,10 @@
 }
 
 .population {
+  position: absolute;
+  left: 0;
+  right: 0;
+  padding-top: 64px;
   font-weight: 500;
   font-size: 2em;
   text-align: center;
@@ -135,4 +143,16 @@
 
 .delivery-item {
   display: flex;
+}
+
+.map-mode-button-container {
+  width: 10%;
+}
+
+.switch-map-mode-button {
+  font-family: "Poppins";
+  background: none;
+  height: 64px;
+  padding: 0.5em 1em;
+  color: var(--space-white);
 }

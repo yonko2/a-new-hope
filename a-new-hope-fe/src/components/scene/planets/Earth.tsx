@@ -3,6 +3,7 @@ import {useFrame, useLoader} from "@react-three/fiber";
 import * as THREE from "three";
 import { gsap } from "gsap";
 import earthImage from "../resources/earth.jpeg";
+import { useTimeStore } from "../../../stores/timeStore";
 
 interface IProps {
     visible: boolean;
@@ -11,6 +12,8 @@ interface IProps {
 
 const Earth = (args: IProps) => {
     const { visible, size } = args;
+
+    const rate = useTimeStore(state => state.rate)
 
     const meshRef = useRef<THREE.Mesh>(null);
     const earthTexture = useLoader(THREE.TextureLoader, earthImage);
@@ -28,7 +31,7 @@ const Earth = (args: IProps) => {
     useFrame((_state, delta) => {
         if (meshRef.current) {
             // Rotate the Earth slowly around the y-axis.
-            meshRef.current.rotation.y += delta * 0.3; // Adjust speed as needed
+            meshRef.current.rotation.y += delta * 0.3 * rate; // Adjust speed as needed
         }
     });
 
