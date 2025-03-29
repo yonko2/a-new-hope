@@ -21,12 +21,14 @@ public class SimulationService {
         final long deathsFromStarvation = populationService.consumeDailyResources();
         populationService.decreasePopulation(deathsFromStarvation);
         final long births = populationService.births();
+        final Map<String, Double> resourcesRatio = populationService.getResourceRatio();
 
         return new SimulationInfo(populationService.getNumberOfPeople(),
                 populationService.resourcesStorage.getResources(),
                 deathsFromNaturalCauses,
                 deathsFromStarvation,
-                births);
+                births,
+                resourcesRatio);
     }
 
     public void addRocketDeliveryResources(Map<String, Long> deliveredResources) {
