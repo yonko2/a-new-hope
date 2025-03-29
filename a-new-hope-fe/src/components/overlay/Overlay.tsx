@@ -6,6 +6,8 @@ import "../../styles/Overlay.css";
 import { Population } from "./Population";
 import { useTimeStore } from "../../stores/timeStore";
 import { useSceneStore } from "../../stores/sceneStore";
+import { useDeliveryStore } from "../../stores/deliveryStore";
+import { DeliveryMenu } from "../delivery/DeliveryMenu";
 
 export const Overlay = memo(function Overlay() {
   const isPaused = useTimeStore((state) => state.isPaused);
@@ -17,9 +19,14 @@ export const Overlay = memo(function Overlay() {
   const switchMapMode = useSceneStore((state) => state.switchMapMode);
   const isRunningAnimation = useSceneStore((state) => state.isRunningAnimation);
 
+  const isDeliveryMenuShown = useDeliveryStore(
+    (state) => state.deliveryMenuShown
+  );
+
   return (
     <div className="overlay">
-      {/* <DeliveryMenu /> */}
+      {isDeliveryMenuShown ? <DeliveryMenu /> : null}
+
       <div className="header">
         <div className="map-mode-button-container">
           <button
@@ -50,7 +57,7 @@ export const Overlay = memo(function Overlay() {
           </div>
           <div className="speed-rate">{`${rate}x`}</div>
         </div>
-        
+
         <div onClick={() => rate !== 3 && setSpeed(rate + 1)}>⏭</div>
       </div>
     </div>
