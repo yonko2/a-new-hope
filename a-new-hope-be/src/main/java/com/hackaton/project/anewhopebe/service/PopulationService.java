@@ -15,20 +15,23 @@ public class PopulationService {
     private static final long DEFAULT_POPULATION = 100;
     private static final Map<String, Long> CONSUMPTION_PER_DAY_FOR_PERSON = Map.of(
             "Food", 1L,
-            "Water", 2L
+            "Water", 2L,
+            "Air", 3L
     );
 
     private long numberOfPeople;
+    //equal to numberOfPeople - max starving people
     private long numberOfPeopleWithoutDeficiency;
 
     @Autowired
     ResourcesService resourcesStorage;
+    @Autowired
     DeficiencyService deficiencyService;
 
     public PopulationService() {
         this.numberOfPeople = DEFAULT_POPULATION;
         this.numberOfPeopleWithoutDeficiency = DEFAULT_POPULATION;
-        deficiencyService = new DeficiencyService(resourcesStorage);
+        //deficiencyService = new DeficiencyService(resourcesStorage);
     }
 
     public long getNumberOfPeople() {
@@ -45,44 +48,50 @@ public class PopulationService {
         return this.numberOfPeople;
     }
 
-    public Map<String, Long> calculateConsumptionPerDay() {
-        return CONSUMPTION_PER_DAY_FOR_PERSON.entrySet()
-                .stream()
-                .peek(entry -> entry.setValue(entry.getValue() * numberOfPeopleWithoutDeficiency))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-    }
+//    public Map<String, Long> calculateConsumptionPerDay() {
+//        return CONSUMPTION_PER_DAY_FOR_PERSON.entrySet()
+//                .stream()
+//                .collect(Collectors.toMap(
+//                        Map.Entry::getKey,
+//                        entry -> entry.getValue() * numberOfPeopleWithoutDeficiency
+//                ));
+//    }
 
     public long consumeDailyResources() {
-        final DailyInfo dailyInfo = getSatisfiedPeopleFromDeficiencies();
-        final long satisfiedPeopleFromDeficiencies = dailyInfo.satisfiedDeficinecies();
-
-        final Map<String, Long> consumptionPerDay = calculateConsumptionPerDay();
-        consumptionPerDay.forEach((resourceName, consumption) -> {
-            final long peopleInDeficiencyForResource = resourcesStorage.decreaseResourceVolume(resourceName, consumption);
+        final long peopleWithDeficiencyToDecrease = deficiencyService.calculateNumberOfPeopleInDeficiency();
+        final long dyingPeople = deficiencyService.supplyResourcesForPeopleInDeficiency();
+        //final long satisfiedPeopleFromDeficiencies = dailyInfo.satisfiedDeficinecies();
+        this.numberOfPeopleWithoutDeficiency = numberOfPeople - peopleWithDeficiencyToDecrease;
+        resourcesStorage.getResources().keySet().forEach(resourceName -> {
+            final long peopleInDeficiencyForResource = resourcesStorage.decreaseResourceVolume(resourceName, numberOfPeopleWithoutDeficiency);
             if (peopleInDeficiencyForResource > 0) {
                 final DeficiencyGroup deficiencyGroup = new DeficiencyGroup(1, peopleInDeficiencyForResource);
                 deficiencyService.addDeficiencyGroup(resourceName, deficiencyGroup);
             }
         });
 
-        this.numberOfPeopleWithoutDeficiency += satisfiedPeopleFromDeficiencies;
+        //provide rest resources for people with deficiencies
 
-        return dailyInfo.dyingPeople();
+        //this.numberOfPeopleWithoutDeficiency += satisfiedPeopleFromDeficiencies;
+//        this.numberOfPeopleWithoutDeficiency = numberOfPeople - peopleWithDeficiencyToDecrease;
+
+        return dyingPeople;
     }
 
     public void addResources(Map<String, Long> resourcesToBeAdded) {
         resourcesToBeAdded.forEach(resourcesStorage::increaseResourceVolume);
     }
 
-    private DailyInfo getSatisfiedPeopleFromDeficiencies() {
-        final long peopleInDeficiencyBeforeSupply = deficiencyService.calculateNumberOfPeopleInDeficiency();
+    private long getSatisfiedPeopleFromDeficiencies() {
+        //final long peopleInDeficiencyBeforeSupply = deficiencyService.calculateNumberOfPeopleInDeficiency();
         final long dyingPeople = deficiencyService.supplyResourcesForPeopleInDeficiency();
-        final long currentPeopleInDeficiencyAfterSupply = deficiencyService.calculateNumberOfPeopleInDeficiency();
-        final long satisfiedPeopleFromDeficiencies = peopleInDeficiencyBeforeSupply - currentPeopleInDeficiencyAfterSupply;
-        return new DailyInfo(satisfiedPeopleFromDeficiencies, dyingPeople);
+        //final long currentPeopleInDeficiencyAfterSupply = deficiencyService.calculateNumberOfPeopleInDeficiency();
+        //final long satisfiedPeopleFromDeficiencies = peopleInDeficiencyBeforeSupply - currentPeopleInDeficiencyAfterSupply;
+        return dyingPeople;
     }
 
     public long deathsFromNaturalCauses() {
+        //rounding
         final long deathsFromNaturalCauses = (long) (numberOfPeople * DEATH_RATE_PER_DAY);
         decreasePopulation(deathsFromNaturalCauses);
         return deathsFromNaturalCauses;
@@ -97,5 +106,6 @@ public class PopulationService {
     public void addDeliveredResources(Map<String, Long> deliveredResources) {
         resourcesStorage.addDeliveryResources(deliveredResources);
     }
+
 
 }

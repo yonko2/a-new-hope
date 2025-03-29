@@ -1,7 +1,5 @@
 package com.hackaton.project.anewhopebe.data;
 
-import java.util.Map;
-
 public abstract class Resource {
 
     private long consumptionPerPersonForADay;
@@ -28,8 +26,12 @@ public abstract class Resource {
         return volume;
     }
 
-    //number of people with deficiency
+    // number of people with deficiency
     public long decreaseVolume(long numberOfPeopleToFeed) {
+        if (numberOfPeopleToFeed == 0) {
+            return 0;
+        }
+
         final long volumeToDecrease = numberOfPeopleToFeed * consumptionPerPersonForADay;
         final long leftVolume = this.volume - volumeToDecrease;
         if (leftVolume > 0) {
