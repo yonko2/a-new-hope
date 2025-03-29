@@ -27,4 +27,4 @@ jobs:
         # Email that you use with heroku
         heroku_email: kiril.georgiev2003gmail.com
         # The appname to use for deploying/updating
-        heroku_app_name: a-new-hope
+        heroku_app_name: a-new-hope-be
