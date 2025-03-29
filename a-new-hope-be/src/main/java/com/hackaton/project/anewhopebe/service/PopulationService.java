@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class PopulationService {
@@ -69,5 +70,13 @@ public class PopulationService {
         final long births = (long) (numberOfPeople * BIRTH_RATE_PER_DAY);
         increasePopulation(births);
         return births;
+    }
+
+    public Map<String, Double> getResourceRatio() {
+        final Map<String, Long> numberOfPeoplePerResource = deficiencyService.getNumberOfPeoplePerResource();
+        return numberOfPeoplePerResource.entrySet()
+                .stream()
+                .map(e -> Map.entry(e.getKey(), e.getValue().doubleValue() / numberOfPeople))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 }

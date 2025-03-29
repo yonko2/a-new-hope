@@ -6,5 +6,6 @@ public record SimulationInfo(long population,
                              Map<String, Resource> resources,
                              long deathsFromNatural,
                              long deathsFromStarvation,
-                             long births) {
+                             long births,
+                             Map<String, Double> resourceRatio) {
 }

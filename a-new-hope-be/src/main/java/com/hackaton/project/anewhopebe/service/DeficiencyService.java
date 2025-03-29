@@ -199,4 +199,14 @@ public class DeficiencyService {
         deficiency.groupWithDeficiency().addAll(groupWithoutExisting);
     }
 
+    public Map<String, Long> getNumberOfPeoplePerResource() {
+        return deficiencies.entrySet()
+                .stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue()
+                        .groupWithDeficiency()
+                        .stream()
+                        .map(DeficiencyGroup::numberOfPeople)
+                        .reduce(0L, Long::sum)));
+    }
+
 }
