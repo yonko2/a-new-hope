@@ -124,8 +124,6 @@ const SpaceScene = () => {
     intervalMs: 50,
   });
 
-  console.log();
-
   return (
     <>
       <div style={{ width: "100vw", height: "100vh", position: "absolute" }}>
