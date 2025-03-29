@@ -3,28 +3,28 @@ import { useDeliveryStore } from "../stores/deliveryStore";
 import { useTimeStore } from "../stores/timeStore";
 
 export function useDeliveryEventEmitter() {
-  const daysElapsed = useTimeStore((state) => state.daysElapsed);
+  const monthsElapsed = useTimeStore((state) => state.monthsElapsed);
 
   const progress = useDeliveryStore((state) => state.progress);
-  const daysTillNextRocket = useDeliveryStore(
-    (state) => state.daysTillNextRocket
+  const monthsTillNextRocket = useDeliveryStore(
+    (state) => state.monthsTillNextRocket
   );
 
   const sendRocket = useDeliveryStore((state) => state.sendRocket);
-  const updateDaysTillNextRocket = useDeliveryStore(
-    (state) => state.updateDaysTillNextRocket
+  const updateMonthsTillNextRocket = useDeliveryStore(
+    (state) => state.updateMonthsTillNextRocket
   );
 
   useEffect(() => {
-    if (daysTillNextRocket === 0) {
+    if (monthsTillNextRocket === 0) {
       sendRocket();
-      updateDaysTillNextRocket(); // nullify counter
+      updateMonthsTillNextRocket(); // nullify counter
     }
-  }, [daysTillNextRocket, sendRocket, updateDaysTillNextRocket]);
+  }, [monthsTillNextRocket, sendRocket, updateMonthsTillNextRocket]);
 
   useEffect(() => {
     if (progress === undefined) {
-      updateDaysTillNextRocket(); // start counter
+      updateMonthsTillNextRocket(); // start counter
     }
-  }, [daysElapsed, progress, updateDaysTillNextRocket]);
+  }, [monthsElapsed, progress, updateMonthsTillNextRocket]);
 }

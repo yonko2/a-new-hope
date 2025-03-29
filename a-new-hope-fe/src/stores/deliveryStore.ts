@@ -1,25 +1,25 @@
 import { create } from "zustand";
-import { DaysTillDeliveryEvent } from "../constants/delivery";
+import { MonthsTillDeliveryEvent } from "../constants/delivery";
 
-export const DeliveryDaysTotal = 30;
+export const DeliveryMonthsTotal = 7;
 
 type DeliveryStore = {
   progress: number | undefined;
-  daysTillNextRocket: number | undefined;
+  monthsTillNextRocket: number | undefined;
   sendRocket: () => void;
   updateProgress: () => void;
-  updateDaysTillNextRocket: () => void;
+  updateMonthsTillNextRocket: () => void;
 };
 
 export const useDeliveryStore = create<DeliveryStore>((set) => ({
   progress: undefined,
-  daysTillNextRocket: DaysTillDeliveryEvent,
+  monthsTillNextRocket: MonthsTillDeliveryEvent,
   sendRocket: () => set({ progress: 0 }),
   updateProgress: () => {
     return set((state) => {
       let newProgress: number | undefined = 0;
       if (state.progress !== undefined) {
-        newProgress = state.progress + 1 / DeliveryDaysTotal;
+        newProgress = state.progress + 1 / DeliveryMonthsTotal;
       }
 
       if (newProgress >= 1) {
@@ -29,20 +29,20 @@ export const useDeliveryStore = create<DeliveryStore>((set) => ({
       return { progress: newProgress };
     });
   },
-  updateDaysTillNextRocket: () =>
+  updateMonthsTillNextRocket: () =>
     set((state) => {
-      const daysTillNextRocket = (() => {
-        if (state.daysTillNextRocket === 0) {
+      const monthsTillNextRocket = (() => {
+        if (state.monthsTillNextRocket === 0) {
           return undefined;
-        } else if (state.daysTillNextRocket === undefined) {
-          return DaysTillDeliveryEvent;
+        } else if (state.monthsTillNextRocket === undefined) {
+          return MonthsTillDeliveryEvent;
         } else {
-          return state.daysTillNextRocket - 1;
+          return state.monthsTillNextRocket - 1;
         }
       })();
 
       return {
-        daysTillNextRocket,
+        monthsTillNextRocket,
       };
     }),
 }));

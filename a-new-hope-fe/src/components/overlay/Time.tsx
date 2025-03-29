@@ -4,15 +4,19 @@ import { useTimeStore } from "../../stores/timeStore";
 const InitialDate = new Date("2100-1-1");
 
 export const Time = memo(function Time() {
-  const daysElapsed = useTimeStore((state) => state.daysElapsed);
+  const monthsElapsed = useTimeStore((state) => state.monthsElapsed);
 
   const startDate = new Date(InitialDate);
 
-  startDate.setDate(InitialDate.getDate() + daysElapsed);
+  startDate.setMonth(InitialDate.getMonth() + monthsElapsed);
+
+  const startDateString = startDate.toISOString();
 
   return (
     <div className="container time">
-      <span>{startDate.toISOString().split("T")[0]}</span>
+      <span>
+        {startDateString.substring(0, startDateString.lastIndexOf("-"))}
+      </span>
     </div>
   );
 });

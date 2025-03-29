@@ -3,7 +3,7 @@ import { useDeliveryStore } from "../stores/deliveryStore";
 import { useTimeStore } from "../stores/timeStore";
 
 export function useDeliveryUpdater() {
-  const daysElapsed = useTimeStore((state) => state.daysElapsed);
+  const monthsElapsed = useTimeStore((state) => state.monthsElapsed);
 
   const progress = useDeliveryStore((state) => state.progress);
   const updateProgress = useDeliveryStore((state) => state.updateProgress);
@@ -12,5 +12,5 @@ export function useDeliveryUpdater() {
     if (progress !== undefined) {
       updateProgress();
     }
-  }, [progress !== undefined, daysElapsed, updateProgress]);
+  }, [progress !== undefined, monthsElapsed, updateProgress]);
 }

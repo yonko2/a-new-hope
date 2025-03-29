@@ -12,12 +12,13 @@
   "dependencies": {
     "@react-three/drei": "^10.0.5",
     "@react-three/fiber": "^9.1.0",
+    "@tanstack/react-query": "^5.70.0",
     "@types/three": "^0.175.0",
     "gsap": "^3.12.7",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "three-spritetext": "^1.9.5",
     "three": "^0.175.0",
+    "three-spritetext": "^1.9.5",
     "zustand": "^5.0.3"
   },
   "devDependencies": {
