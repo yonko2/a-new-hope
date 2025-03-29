@@ -1,14 +1,12 @@
 import { memo } from "react";
 import { ResourceSchema } from "../../types/resources";
-import { ResourceEmojis } from "../../constants/resources";
 import { ProgressBar } from "./ProgressBar";
+import { ResourceIcon } from "../shared/ResourceIcon";
 
 export const Resource = memo(function Resource(props: ResourceSchema) {
   return (
     <div className="container resource">
-      <div className="container resource-icon">
-        {ResourceEmojis[props.type]}
-      </div>
+      <ResourceIcon type={props.type} />
       <div className="resource-progress-bar">
         <ProgressBar value={props.availability} />
       </div>

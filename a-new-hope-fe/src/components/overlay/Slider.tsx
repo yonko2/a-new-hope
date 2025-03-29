@@ -1,34 +1,34 @@
-import { memo, useState } from "react";
+import { memo } from "react";
 
-export const Slider = memo(function Slider() {
-  const steps = [0, 25, 50, 75, 100];
-
-  const [currentStep, setCurrentStep] = useState(0);
-
+export const Slider = memo(function Slider(props: {
+  steps: number[];
+  currentStep: number;
+  setCurrentStep: (value: number) => void;
+}) {
   const handleSliderChange: React.ChangeEventHandler<HTMLInputElement> = (
     e
   ) => {
     const value = Number(e.target.value);
 
-    const closestIndex = steps.reduce(
+    const closestIndex = props.steps.reduce(
       (closest, step, index) =>
-        Math.abs(step - value) < Math.abs(steps[closest] - value)
+        Math.abs(step - value) < Math.abs(props.steps[closest] - value)
           ? index
           : closest,
       0
     );
-    setCurrentStep(closestIndex);
+    props.setCurrentStep(closestIndex);
   };
 
   const goPrevious = () => {
-    if (currentStep > 0) {
-      setCurrentStep(currentStep - 1);
+    if (props.currentStep > 0) {
+      props.setCurrentStep(props.currentStep - 1);
     }
   };
 
   const goNext = () => {
-    if (currentStep < steps.length - 1) {
-      setCurrentStep(currentStep + 1);
+    if (props.currentStep < props.steps.length - 1) {
+      props.setCurrentStep(props.currentStep + 1);
     }
   };
 
@@ -36,21 +36,24 @@ export const Slider = memo(function Slider() {
     <div className="slider">
       <input
         type="range"
-        min={steps[0]}
-        max={steps[steps.length - 1]}
-        value={steps[currentStep]}
+        min={props.steps[0]}
+        max={props.steps[props.steps.length - 1]}
+        value={props.steps[props.currentStep]}
         onChange={handleSliderChange}
         step="1"
         style={{ flexGrow: 1 }}
       />
-      <div className="slider-arrows">
-        <button onClick={goPrevious} disabled={currentStep === 0}>
+      {/* <div className="slider-arrows">
+        <button onClick={goPrevious} disabled={props.currentStep === 0}>
           &#8592;
         </button>
-        <button onClick={goNext} disabled={currentStep === steps.length - 1}>
+        <button
+          onClick={goNext}
+          disabled={props.currentStep === props.steps.length - 1}
+        >
           &#8594;
         </button>
-      </div>
+      </div> */}
     </div>
   );
 });
