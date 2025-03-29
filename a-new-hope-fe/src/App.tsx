@@ -1,9 +1,11 @@
-import "./styles/App.css";
-import { Overlay } from "./components/overlay/Overlay";
+import './styles/App.css'
+import SpaceScene from "./components/scene/SpaceScene.tsx";
+import {Overlay} from "./components/overlay/Overlay.tsx";
 
 function App() {
   return (
     <>
+        <SpaceScene />
       <Overlay />
     </>
   );
