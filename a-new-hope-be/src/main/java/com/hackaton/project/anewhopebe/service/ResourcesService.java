@@ -27,4 +27,12 @@ public class ResourcesService {
     public void increaseResourceVolume(String name, long volume) {
         resources.get(name).increaseVolume(volume);
     }
+
+    public void addDeliveryResources(Map<String, Long> deliveredResources) {
+        deliveredResources.forEach(this::increaseResourceVolume);
+    }
+
+    public Map<String, Resource> getResources() {
+        return resources;
+    }
 }

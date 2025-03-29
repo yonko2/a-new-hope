@@ -5,6 +5,7 @@ import com.hackaton.project.anewhopebe.data.DeficiencyGroup;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class DeficiencyService {
@@ -30,10 +31,38 @@ public class DeficiencyService {
                 .orElse(0L);
     }
 
-    public void supplyResourcesForPeopleInDeficiency() {
+    public long supplyResourcesForPeopleInDeficiency() {
         supplyResourcesToPeopleInDeficiency();
         updateDaysOfStarving();
         //see which groups are dying
+        return calculateNumberOfDyingPeople();
+    }
+
+   //Ba private long getDyingLackingResource()
+
+    private long calculateNumberOfDyingPeople() {
+        //also remove the dying ones
+        //dyingForSpecificResource
+        final Map<String, Long> dyingForSpecificResource = deficiencies.entrySet()
+                .stream()
+                .map(entry -> {
+                    final Deficiency deficiency = entry.getValue();
+                    final DeficiencyGroup longestDeficientGroup = deficiency.groupWithDeficiency().peek();
+                    if (longestDeficientGroup.starvingDays() > resourcesService.getResource(entry.getKey()).getDaysTillDeath()) {
+                        deficiency.groupWithDeficiency().poll();
+                        return Map.entry(entry.getKey(), longestDeficientGroup.numberOfPeople());
+                    }
+                    return Map.entry(entry.getKey(), 0L);
+                })
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
+        // iterate through this map and get the entry with most dying people
+        return dyingForSpecificResource.entrySet()
+                .stream()
+                .max(Map.Entry.comparingByValue())
+                .orElse(Map.entry("", 0L))
+                .getValue();
+
     }
 
     private void updateDaysOfStarving() {
