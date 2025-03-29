@@ -23,6 +23,10 @@ export const Overlay = memo(function Overlay() {
     (state) => state.deliveryMenuShown
   );
 
+  const hasProgress = useDeliveryStore((state) => state.progress !== undefined);
+
+  const speedButtonsStyle = { display: hasProgress ? 'none' : undefined };
+
   return (
     <div className="overlay">
       {isDeliveryMenuShown ? <DeliveryMenu /> : null}
@@ -30,7 +34,7 @@ export const Overlay = memo(function Overlay() {
       <div className="header">
         <div className="map-mode-button-container">
           <button
-            disabled={isRunningAnimation}
+            disabled={isRunningAnimation || isDeliveryMenuShown}
             className="switch-map-mode-button container"
             onClick={switchMapMode}
           >
@@ -49,7 +53,12 @@ export const Overlay = memo(function Overlay() {
         <Allocations />
       </div>
       <div className="footer">
-        <div onClick={() => rate !== 1 && setSpeed(rate - 1)}>⏮</div>
+        <div
+          style={speedButtonsStyle}
+          onClick={() => rate !== 1 && setSpeed(rate - 1)}
+        >
+          ⏮
+        </div>
 
         <div className="pause-container">
           <div className="pause-button" onClick={startStop}>
@@ -58,7 +67,12 @@ export const Overlay = memo(function Overlay() {
           <div className="speed-rate">{`${rate}x`}</div>
         </div>
 
-        <div onClick={() => rate !== 3 && setSpeed(rate + 1)}>⏭</div>
+        <div
+          style={speedButtonsStyle}
+          onClick={() => rate !== 3 && setSpeed(rate + 1)}
+        >
+          ⏭
+        </div>
       </div>
     </div>
   );

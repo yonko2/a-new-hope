@@ -140,7 +140,7 @@
 
   padding: 0.5em 1em 1em 1em;
 
-  background-color: #d56f53;
+  background-color: #cfb3ac;
 
   position: relative;
   bottom: -33vh;
@@ -163,7 +163,8 @@
   color: var(--space-white);
 }
 
-.switch-map-mode-button:disabled, .delivery-menu-confirm:disabled {
+.switch-map-mode-button:disabled,
+.delivery-menu-confirm:disabled {
   color: gray;
 }
 
