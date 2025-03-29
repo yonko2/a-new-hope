@@ -1,17 +1,17 @@
 import {Canvas} from "@react-three/fiber";
-import { OrbitControls as DreiOrbitControls } from '@react-three/drei';
+import {OrbitControls as DreiOrbitControls} from '@react-three/drei';
 import { OrbitControls as ThreeOrbitControls } from 'three-stdlib';
 import * as THREE from 'three'
 import {Suspense, useRef, useState} from "react";
 import { gsap } from 'gsap';
-import Object from "./Object.tsx";
 import Earth from "./planets/Earth.tsx";
-import Mars from "./planets/Mars.tsx";
 import ArrowButton from "./rockets/Arrow";
+import PlanetWithDots from "./planets/PlanetWithDots.tsx";
+import {usePopulationSpreadStable} from "../../hooks/usePopulationSpread.tsx";
 
 const INITIAL_TARGET = new THREE.Vector3(0, 0, 0);
-const MARS_SIZE = 50;
-const EARTH_SIZE = 50;
+const MARS_SIZE = 100;
+const EARTH_SIZE = 100;
 
 const SpaceScene = () => {
     const controlsRef = useRef<ThreeOrbitControls>(null);
@@ -34,7 +34,7 @@ const SpaceScene = () => {
                 duration: 1,
                 x: 0,
                 y: 0,
-                z: 500,
+                z: MARS_SIZE * 10,
                 ease: "power2.out",
                 onUpdate: () => {
                     object.lookAt(target);
@@ -66,7 +66,7 @@ const SpaceScene = () => {
                     duration: 1,
                     x: savedOrbitPos.x,
                     y: savedOrbitPos.y,
-                    z: 150,
+                    z: MARS_SIZE * 3,
                     ease: "power2.out",
                     onUpdate: () => {
                         object.lookAt(target);
@@ -88,6 +88,15 @@ const SpaceScene = () => {
 
     const earthCenter = new THREE.Vector3(EARTH_SIZE * 4, 0, 0); // Earth is at [200, 0, 0]
     const marsCenter = new THREE.Vector3(0, 0, 0);
+
+    const dots = usePopulationSpreadStable({
+        initialDotsCount: 5,
+        maxDots: 100_000,
+        spreadDistance: 10,
+        spreadRate: 1000,
+        intervalMs: 50,
+    });
+
 
     return (
         <>
@@ -113,19 +122,15 @@ const SpaceScene = () => {
                 />}
             <div style={{ width: "1000px", height: "1000px" }}>
                 <Canvas
-                    camera={{ position: [0, 0, 150], fov: 50, near: 0.1, far: 10000 }}
+                    camera={{ position: [0, 0, MARS_SIZE * 3], fov: 50, near: 0.1, far: 10000 }}
                     onCreated={({ scene }) => setSceneRef(scene)}
                 >
                     <ambientLight intensity={0.3} />
                     <directionalLight intensity={0.8} position={[5, 5, 5]} />
 
                     <Suspense fallback={null}>
-                        <Mars mapMode={mapMode} size={MARS_SIZE} />
                         <Earth visible={mapMode} size={EARTH_SIZE} />
-
-                        <Object lat={0} lon={0} radius={MARS_SIZE} color="red" size={0.5} />
-                        <Object lat={45} lon={45} radius={MARS_SIZE} color="blue" size={0.5} />
-                        <Object lat={-30} lon={120} radius={MARS_SIZE} color="green" size={0.5} />
+                        <PlanetWithDots mapMode={mapMode} planetSize={MARS_SIZE} dots={dots} />
                     </Suspense>
 
                     <DreiOrbitControls
