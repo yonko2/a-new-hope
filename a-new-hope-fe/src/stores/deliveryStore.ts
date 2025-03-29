@@ -1,24 +1,24 @@
 import { create } from "zustand";
-import { MonthsTillDeliveryEvent } from "../constants/delivery";
+import { DaysTillDeliveryEvent } from "../constants/delivery";
 import { ResourceType } from "../types/resources";
 
-export const DeliveryMonthsTotal = 7;
+export const DeliveryDaysTotal = 20;
 
 type DeliveryStore = {
   progress: number | undefined;
-  monthsTillNextRocket: number | undefined;
+  daysTillNextRocket: number | undefined;
   deliveryMenuShown: boolean;
   resources: Record<ResourceType, number>;
   sendRocket: () => void;
   updateProgress: () => void;
-  updateMonthsTillNextRocket: () => void;
+  updateDaysTillNextRocket: () => void;
   setDeliveryMenuShown: (isShown: boolean) => void;
   setResource: (resource: ResourceType, value: number) => void;
 };
 
 export const useDeliveryStore = create<DeliveryStore>((set) => ({
   progress: undefined,
-  monthsTillNextRocket: MonthsTillDeliveryEvent,
+  daysTillNextRocket: DaysTillDeliveryEvent,
   deliveryMenuShown: false,
   resources: { food: 0, water: 0, oxygen: 0 },
   sendRocket: () => set({ progress: 0 }),
@@ -26,7 +26,7 @@ export const useDeliveryStore = create<DeliveryStore>((set) => ({
     return set((state) => {
       let newProgress: number | undefined = 0;
       if (state.progress !== undefined) {
-        newProgress = state.progress + 1 / DeliveryMonthsTotal;
+        newProgress = state.progress + 1 / DeliveryDaysTotal;
       }
 
       if (newProgress >= 1) {
@@ -36,20 +36,20 @@ export const useDeliveryStore = create<DeliveryStore>((set) => ({
       return { progress: newProgress };
     });
   },
-  updateMonthsTillNextRocket: () =>
+  updateDaysTillNextRocket: () =>
     set((state) => {
-      const monthsTillNextRocket = (() => {
-        if (state.monthsTillNextRocket === 0) {
+      const daysTillNextRocket = (() => {
+        if (state.daysTillNextRocket === 0) {
           return undefined;
-        } else if (state.monthsTillNextRocket === undefined) {
-          return MonthsTillDeliveryEvent;
+        } else if (state.daysTillNextRocket === undefined) {
+          return DaysTillDeliveryEvent;
         } else {
-          return state.monthsTillNextRocket - 1;
+          return state.daysTillNextRocket - 1;
         }
       })();
 
       return {
-        monthsTillNextRocket,
+        daysTillNextRocket,
       };
     }),
   setDeliveryMenuShown: (isShown: boolean) =>

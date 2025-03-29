@@ -3,19 +3,19 @@ import { create } from "zustand";
 type TimeRate = number;
 
 type TimeStore = {
-  monthsElapsed: number;
+  daysElapsed: number;
   rate: TimeRate;
   isPaused: boolean;
-  goAtNextMonth: () => void;
+  goAtNextDay: () => void;
   setSpeed: (rate: TimeRate) => void;
   startStop: () => void;
 };
 
 export const useTimeStore = create<TimeStore>((set) => ({
-  monthsElapsed: 0,
+  daysElapsed: 0,
   rate: 1,
   isPaused: false,
-  goAtNextMonth: () => set((state) => ({ monthsElapsed: state.monthsElapsed + 1 })),
+  goAtNextDay: () => set((state) => ({ daysElapsed: state.daysElapsed + 1 })),
   setSpeed: (rate: TimeRate) => set({ rate }),
   startStop: () => set((state) => ({ isPaused: !state.isPaused })),
 }));

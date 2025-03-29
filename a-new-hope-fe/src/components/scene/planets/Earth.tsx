@@ -1,5 +1,5 @@
 import { useRef, useEffect } from "react";
-import {useFrame, useLoader} from "@react-three/fiber";
+import { useFrame, useLoader } from "@react-three/fiber";
 import * as THREE from "three";
 import { gsap } from "gsap";
 import earthImage from "../resources/earth.jpeg";

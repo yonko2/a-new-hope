@@ -1,2 +1,2 @@
 
-export const MonthsTillDeliveryEvent = 10;
+export const DaysTillDeliveryEvent = 11;
