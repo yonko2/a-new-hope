@@ -22,7 +22,6 @@ const SEGMENTS = 100;
 const TUBE_RADIUS = 0.2;
 const COLOR = 0xff0000;
 const CURVE_DRAW_DURATION = 3; // seconds
-const DELAY_AFTER_DRAW = 0.5;
 
 const Rocket = memo(function Rocket({ earthCenter, marsCenter }: RocketProps) {
     const rocketGroupRef = useRef<Group>(null);
@@ -67,43 +66,44 @@ const Rocket = memo(function Rocket({ earthCenter, marsCenter }: RocketProps) {
 
         tubeGeometry.setDrawRange(0, 0);
 
-        // 🟡 1. Animate the curve draw
         gsap.to({ count: 0 }, {
             count: fullCount,
             duration: CURVE_DRAW_DURATION,
-            ease: "power1.out",
+            ease: "power2.out",
             onUpdate() {
                 const { count } = this.targets()[0];
                 tubeGeometry.setDrawRange(0, count);
             },
             onComplete() {
-                rocketTweenRef.current = gsap.to({ t: 0 }, {
-                    t: 1,
-                    duration: (DeliveryDaysTotal * DayInMs) / 1000 / rate,
-                    ease: "power1.out",
-                    delay: DELAY_AFTER_DRAW,
-                    onUpdate() {
-                        const t = this.targets()[0].t;
-                        const point = curve.getPoint(t);
-                        const tangent = curve.getTangent(t);
-                        const defaultForward = new Vector3(0, 1, 0);
-                        const quaternion = new Quaternion().setFromUnitVectors(defaultForward, tangent);
-                        rocketGroupRef.current!.quaternion.copy(quaternion);
-                        rocketGroupRef.current?.position.copy(point);
-                        rocketGroupRef.current?.lookAt(point.clone().add(tangent));
-                        rocketGroupRef.current?.rotateX(-Math.PI / -2);
-                    },
-                    onComplete() {
-                        gsap.delayedCall(1, () => {
-                            scene.remove(arrowMesh);
-                            tubeGeometry.dispose();
-                            material.dispose();
-                        });
-                    },
+                // Optionally remove the tube shortly after it finishes drawing
+                gsap.delayedCall(1, () => {
+                    scene.remove(arrowMesh);
+                    tubeGeometry.dispose();
+                    material.dispose();
                 });
             },
         });
 
+        // 2. Animate the rocket movement along the curve concurrently (longer duration)
+        rocketTweenRef.current = gsap.to({ t: 0 }, {
+            t: 1,
+            duration: (DeliveryDaysTotal * DayInMs) / 1000 / rate,
+            ease: "power1.out",
+            onUpdate() {
+                const t = this.targets()[0].t;
+                const point = curve.getPoint(t);
+                const tangent = curve.getTangent(t);
+                const defaultForward = new Vector3(0, 1, 0);
+                const quaternion = new Quaternion().setFromUnitVectors(defaultForward, tangent);
+                rocketGroupRef.current!.quaternion.copy(quaternion);
+                rocketGroupRef.current?.position.copy(point);
+                rocketGroupRef.current?.lookAt(point.clone().add(tangent));
+                rocketGroupRef.current?.rotateX(-Math.PI / -2);
+            },
+            onComplete() {
+                // You can add any additional behavior after the rocket reaches its destination.
+            },
+        });
         return () => {
             if (arrowMesh) {
                 scene.remove(arrowMesh);
@@ -121,8 +121,12 @@ const Rocket = memo(function Rocket({ earthCenter, marsCenter }: RocketProps) {
     }, [isPaused]);
 
     return (
-        <group ref={rocketGroupRef} scale={[4, 4, 4]}>
-            {/* Replace with any custom rocket model or mesh */}
+        <group
+            ref={rocketGroupRef} scale={[4, 4, 4]}
+           onPointerOver={() => {
+               console.log('Hovering over rocket');
+           }}
+        >
             <mesh>
                 <cylinderGeometry args={[1, 1, 4, 16]} />
                 <meshStandardMaterial color="white" />
