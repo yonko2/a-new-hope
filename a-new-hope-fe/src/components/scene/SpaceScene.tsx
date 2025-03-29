@@ -5,10 +5,11 @@ import * as THREE from "three";
 import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import Earth from "./planets/Earth.tsx";
-import ArrowButton from "./rockets/Arrow";
 import PlanetWithDots from "./planets/PlanetWithDots.tsx";
 import { usePopulationSpreadStable } from "../../hooks/usePopulationSpread.tsx";
 import { useSceneStore } from "../../stores/sceneStore.ts";
+import StarsBackground from "./background/StarsBackground.tsx";
+import PanLimit from "./background/PanLimit.tsx";
 
 const INITIAL_TARGET = new THREE.Vector3(0, 0, 0);
 const MARS_SIZE = 70;
@@ -117,24 +118,16 @@ const SpaceScene = () => {
 
   const dots = usePopulationSpreadStable({
     initialDotsCount: 5,
-    maxDots: 100_000,
-    spreadDistance: 10,
-    spreadRate: 1000,
+    maxDots: 50_000,
+    spreadDistance: 15,
+    spreadRate: 500,
     intervalMs: 50,
   });
 
+  console.log();
+
   return (
     <>
-      {mapMode === "orbit" && (
-        <ArrowButton
-          scene={sceneRef}
-          earthCenter={earthCenter}
-          marsCenter={marsCenter}
-          fromPercent={0.5}
-          toPercent={1}
-          direction="toEarth"
-        />
-      )}
       <div style={{ width: "100vw", height: "100vh", position: "absolute" }}>
         <Canvas
           camera={{
@@ -145,7 +138,7 @@ const SpaceScene = () => {
           }}
           onCreated={({ scene }) => setSceneRef(scene)}
         >
-          <ambientLight intensity={0.3} />
+          <ambientLight intensity={0.7} />
           <directionalLight intensity={0.8} position={[5, 5, 5]} />
 
           <Suspense fallback={null}>
@@ -155,12 +148,23 @@ const SpaceScene = () => {
               planetSize={MARS_SIZE}
               dots={dots}
             />
+            <StarsBackground radius={2000} />
           </Suspense>
 
           <DreiOrbitControls
             ref={controlsRef}
             enableZoom={true}
             dampingFactor={0.1}
+            minDistance={100}
+            maxDistance={1400}
+          />
+
+          <PanLimit
+              controlsRef={controlsRef}
+              minX={-500}
+              minY={-500}
+              maxX={800}
+              maxY={500}
           />
         </Canvas>
       </div>
