@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useTimeStore } from "../stores/timeStore";
 
-const DayInMs = 1000;
+export const DayInMs = 1000;
 
 export function useTimeUpdater() {
   const isPaused = useTimeStore((state) => state.isPaused);
