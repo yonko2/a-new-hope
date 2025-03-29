@@ -1,6 +1,6 @@
 import {useEffect, useMemo, useRef} from "react";
 import * as THREE from "three";
-import latLongToCartesian from "./utils.ts";
+import { latLongToCartesian } from "./utils.ts";
 
 export interface Dot {
     lat: number;

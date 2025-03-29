@@ -21,7 +21,7 @@ const randomDotNear = (dot: Dot, spreadDistance: number): Dot => {
 
     return {
         lat: newLat,
-        lon: ((newLon + 180) % 360) - 180, // wrap lon within [-180,180]
+        lon: ((newLon + 180) % 360) - 180
     };
 };
 

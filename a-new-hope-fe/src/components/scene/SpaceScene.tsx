@@ -10,10 +10,14 @@ import { usePopulationSpreadStable } from "../../hooks/usePopulationSpread.tsx";
 import { useSceneStore } from "../../stores/sceneStore.ts";
 import StarsBackground from "./background/StarsBackground.tsx";
 import PanLimit from "./background/PanLimit.tsx";
+import Rocket from "./rocket/Rocket.tsx";
+import {useDeliveryStore} from "../../stores/deliveryStore.ts";
 
-const INITIAL_TARGET = new THREE.Vector3(0, 0, 0);
 const MARS_SIZE = 70;
 const EARTH_SIZE = 100;
+const INITIAL_TARGET = new THREE.Vector3(0, 0, 0);
+const EARTH_CENTER = new THREE.Vector3(EARTH_SIZE * 4, 0, 0);
+const MARS_CENTER = new THREE.Vector3(0, 0, 0);
 
 const SpaceScene = () => {
   const controlsRef = useRef<ThreeOrbitControls>(null);
@@ -26,7 +30,6 @@ const SpaceScene = () => {
   const [savedOrbitPos, setSavedOrbitPos] = useState<THREE.Vector3 | null>(
     null
   );
-  const [sceneRef, setSceneRef] = useState<THREE.Scene | null>(null);
 
   const onToggleMode = useCallback(() => {
     if (!controlsRef.current) return;
@@ -113,9 +116,6 @@ const SpaceScene = () => {
 
   useEffect(onToggleMode, [onToggleMode]);
 
-  const earthCenter = new THREE.Vector3(EARTH_SIZE * 4, 0, 0); // Earth is at [200, 0, 0]
-  const marsCenter = new THREE.Vector3(0, 0, 0);
-
   const dots = usePopulationSpreadStable({
     initialDotsCount: 5,
     maxDots: 50_000,
@@ -123,6 +123,8 @@ const SpaceScene = () => {
     spreadRate: 500,
     intervalMs: 50,
   });
+
+  const progress = useDeliveryStore(state => state.progress);
 
   return (
     <>
@@ -134,7 +136,6 @@ const SpaceScene = () => {
             near: 0.1,
             far: 10000,
           }}
-          onCreated={({ scene }) => setSceneRef(scene)}
         >
           <ambientLight intensity={0.7} />
           <directionalLight intensity={0.8} position={[5, 5, 5]} />
@@ -164,6 +165,8 @@ const SpaceScene = () => {
               maxX={800}
               maxY={500}
           />
+
+          { progress && <Rocket earthCenter={EARTH_CENTER} marsCenter={MARS_CENTER} /> }
         </Canvas>
       </div>
     </>
