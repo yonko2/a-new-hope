@@ -166,7 +166,7 @@ const SpaceScene = () => {
               maxY={500}
           />
 
-          { progress && <Rocket earthCenter={EARTH_CENTER} marsCenter={MARS_CENTER} /> }
+          { mapMode == 'plane' && progress && <Rocket earthCenter={EARTH_CENTER} marsCenter={MARS_CENTER} /> }
         </Canvas>
       </div>
     </>
