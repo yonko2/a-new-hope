@@ -121,7 +121,7 @@
   position: absolute;
   left: 0;
   right: 0;
-  padding-top: 64px;
+  margin-top: calc(64px + 1em);
   font-weight: 500;
   font-size: 2em;
   text-align: center;
@@ -155,4 +155,20 @@
   height: 64px;
   padding: 0.5em 1em;
   color: var(--space-white);
+}
+
+.switch-map-mode-button:disabled {
+  color: gray;
+}
+
+.pause-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.speed-rate {
+  font-size: 25px;
+  position: absolute;
+  bottom: -30px;
 }

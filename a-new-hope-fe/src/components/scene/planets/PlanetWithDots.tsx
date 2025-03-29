@@ -15,11 +15,13 @@ interface PlanetWithDotsProps {
 const PlanetWithDots = (args: PlanetWithDotsProps) => {
     const rate = useTimeStore(state => state.rate)
 
+    const isPaused = useTimeStore(state => state.isPaused)
+
     const { dots, planetSize, mapMode } = args;
     const groupRef = useRef<THREE.Group>(null);
 
     useFrame((_state, delta) => {
-        if (groupRef.current && mapMode) {
+        if (groupRef.current && mapMode && !isPaused) {
             groupRef.current.rotation.y += delta * 0.1 * rate;
         }
     });

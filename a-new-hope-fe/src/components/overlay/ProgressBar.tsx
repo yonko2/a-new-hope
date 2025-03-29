@@ -3,7 +3,7 @@ import { CriticalThreshold, NeutralThreshold } from "../../constants/resources";
 
 function getStatusClassName(value: number): string {
     if (value <= CriticalThreshold) {
-        return 'critical-fill'
+        return 'negative-fill'
     }
     if (value <= NeutralThreshold) {
         return 'neutral-fill'

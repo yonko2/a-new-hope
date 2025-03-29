@@ -14,6 +14,7 @@ const Earth = (args: IProps) => {
     const { visible, size } = args;
 
     const rate = useTimeStore(state => state.rate)
+    const isPaused = useTimeStore(state => state.isPaused)
 
     const meshRef = useRef<THREE.Mesh>(null);
     const earthTexture = useLoader(THREE.TextureLoader, earthImage);
@@ -29,7 +30,7 @@ const Earth = (args: IProps) => {
     }, [visible]);
 
     useFrame((_state, delta) => {
-        if (meshRef.current) {
+        if (meshRef.current && !isPaused) {
             // Rotate the Earth slowly around the y-axis.
             meshRef.current.rotation.y += delta * 0.3 * rate; // Adjust speed as needed
         }

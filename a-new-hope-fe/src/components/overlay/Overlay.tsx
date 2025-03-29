@@ -43,7 +43,14 @@ export const Overlay = memo(function Overlay() {
       </div>
       <div className="footer">
         <div onClick={() => rate !== 1 && setSpeed(rate - 1)}>⏮</div>
-        <div onClick={startStop}>{isPaused ? "▶" : "❚❚"}</div>
+
+        <div className="pause-container">
+          <div className="pause-button" onClick={startStop}>
+            {isPaused ? "▶" : "❚❚"}
+          </div>
+          <div className="speed-rate">{`${rate}x`}</div>
+        </div>
+        
         <div onClick={() => rate !== 3 && setSpeed(rate + 1)}>⏭</div>
       </div>
     </div>

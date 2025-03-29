@@ -6,7 +6,7 @@ export const Resources = memo(function Resources() {
   return (
     <div className="resources">
       {resources.map((resource) => (
-        <Resource type={resource} availability={0.5} />
+        <Resource type={resource} availability={0.9} />
       ))}
     </div>
   );

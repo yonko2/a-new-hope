@@ -131,7 +131,7 @@ const SpaceScene = () => {
       <div style={{ width: "100vw", height: "100vh", position: "absolute" }}>
         <Canvas
           camera={{
-            position: [0, 0, MARS_SIZE * 3],
+            position: [0, 0, MARS_SIZE * 3.25],
             fov: 50,
             near: 0.1,
             far: 10000,
