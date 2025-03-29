@@ -6,7 +6,7 @@ import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import Earth from "./planets/Earth.tsx";
 import PlanetWithDots from "./planets/PlanetWithDots.tsx";
-import { usePopulationSpreadStable } from "../../hooks/usePopulationSpread.tsx";
+import { usePopulationSpreadStable } from "../../hooks/usePopulationSpread";
 import { useSceneStore } from "../../stores/sceneStore.ts";
 import StarsBackground from "./background/StarsBackground.tsx";
 import PanLimit from "./background/PanLimit.tsx";
@@ -159,11 +159,11 @@ const SpaceScene = () => {
           />
 
           <PanLimit
-              controlsRef={controlsRef}
-              minX={-500}
-              minY={-500}
-              maxX={800}
-              maxY={500}
+            controlsRef={controlsRef}
+            minX={-500}
+            minY={-500}
+            maxX={800}
+            maxY={500}
           />
 
           { mapMode == 'plane' && progress && <Rocket earthCenter={EARTH_CENTER} marsCenter={MARS_CENTER} /> }
