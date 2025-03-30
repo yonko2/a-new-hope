@@ -12,7 +12,7 @@ import java.util.Map;
 public class ResourcesService {
     Map<String, Resource> INITIAL_RESOURCES = Map.of(Food.NAME, new Food(2_000_000L),
             Water.NAME, new Water(3_000_000L),
-            Air.NAME, new Air(10_000_000L));
+            Air.NAME, new Air(10_000L));
     Map<String, Resource> resources = INITIAL_RESOURCES;
 
     public Resource getResource(String name) {

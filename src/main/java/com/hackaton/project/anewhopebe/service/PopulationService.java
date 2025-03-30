@@ -83,7 +83,7 @@ public class PopulationService {
                     if (numberOfPeople == 0) {
                         return Map.entry(e.getKey(), 0d);
                     }
-                    final double ratio = e.getValue().doubleValue() / numberOfPeople;
+                    final double ratio = 1 - e.getValue().doubleValue() / numberOfPeople;
                     return Map.entry(e.getKey(), ratio);
                 })
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
