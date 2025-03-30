@@ -10,10 +10,14 @@ import java.util.Map;
 
 @Service
 public class ResourcesService {
-    final static Map<String, Resource> INITIAL_RESOURCES = Map.of(Food.NAME, new Food(2_000_000L),
-            Water.NAME, new Water(3_000_000L),
-            Air.NAME, new Air(10_000_000L));
-    Map<String, Resource> resources = INITIAL_RESOURCES;
+    private static final long INITIAL_FOOD_VOLUME = 2_000_000L;
+    private static final long INITIAL_WATER_VOLUME = 3_000_000L;
+    private static final long INITIAL_AIR_VOLUME = 10_000L;
+    private Map<String, Resource> resources;
+
+    public ResourcesService() {
+        this.reset();
+    }
 
     public Resource getResource(String name) {
         return resources.get(name);
@@ -32,8 +36,8 @@ public class ResourcesService {
     }
 
     public void reset() {
-        this.resources.get(Food.NAME).increaseVolume(2_000_000L);
-        this.resources.get(Water.NAME).increaseVolume(3_000_000L);
-        this.resources.get(Air.NAME).increaseVolume(10_000_000L);
+        this.resources = Map.of(Food.NAME, new Food(INITIAL_FOOD_VOLUME),
+                Water.NAME, new Water(INITIAL_WATER_VOLUME),
+                Air.NAME, new Air(INITIAL_AIR_VOLUME));
     }
 }
