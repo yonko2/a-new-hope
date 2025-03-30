@@ -14,7 +14,12 @@ public class SimulationService {
 
     public SimulationInfo getSimulationInfo() {
         if (populationService.getNumberOfPeople() <= 0) {
-            return new SimulationInfo(0, populationService.resourcesStorage.getResources(), 0, 0, 0, Map.of());
+            return new SimulationInfo(0,
+                    populationService.resourcesStorage.getResources(),
+                    0,
+                    0,
+                    0,
+                    Map.of("Water", 0.0, "Food", 0.0, "Air", 0.0));
         }
 
         return simulateDay();
