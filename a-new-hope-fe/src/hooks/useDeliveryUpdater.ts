@@ -28,7 +28,10 @@ export function useDeliveryUpdater() {
         switchMapMode();
       }
 
-      fetch("/delivery", { method: "POST", body: JSON.stringify(resources) });
+      fetch(`${import.meta.env["VITE_API_URL"]}/delivery`, {
+        method: "POST",
+        body: JSON.stringify(resources),
+      });
     }
 
     isAfterInitialRender.current = true;

@@ -25,20 +25,20 @@ type SimulationStore = {
 
 export const useSimulationStore = create<SimulationStore>((set) => ({
   summary: {
-    population: 100,
+    population: 0,
     resources: {
       Air: {
-        volume: 1000,
+        volume: 0,
         name: "Air",
         daysTillDeath: 0,
       },
       Food: {
-        volume: 1000,
+        volume: 0,
         name: "Food",
         daysTillDeath: 0,
       },
       Water: {
-        volume: 1000,
+        volume: 0,
         name: "Water",
         daysTillDeath: 0,
       },

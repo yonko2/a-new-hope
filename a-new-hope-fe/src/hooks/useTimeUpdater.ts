@@ -19,22 +19,19 @@ export function useTimeUpdater() {
     if (!isRequestMade.current) {
       isRequestMade.current = true;
 
-      fetch("/simulation")
-        // .then((data) => data.json())
-        // .then((data) => setSummary(data))
+      fetch(`${import.meta.env["VITE_API_URL"]}/simulate`)
+        .then((data) => data.json())
+        .then((data) => setSummary(data))
         .then(goAtNextDay)
         .finally(() => (isRequestMade.current = false));
     }
-  }, [setSummary, goAtNextDay, setSummary]);
+  }, [setSummary, goAtNextDay]);
 
   useEffect(() => {
     if (isPaused && intervalRef.current) {
       clearInterval(intervalRef.current);
-    } else {
-      intervalRef.current = setInterval(
-        maybeGoAtNextDay,
-        (1 / rate) * DayInMs
-      );
+    } else if (!isPaused) {
+      intervalRef.current = setInterval(maybeGoAtNextDay, (1 / rate) * DayInMs);
     }
 
     return () => {

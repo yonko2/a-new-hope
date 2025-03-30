@@ -14,7 +14,7 @@ type TimeStore = {
 export const useTimeStore = create<TimeStore>((set) => ({
   daysElapsed: 0,
   rate: 1,
-  isPaused: false,
+  isPaused: true,
   goAtNextDay: () => set((state) => ({ daysElapsed: state.daysElapsed + 1 })),
   setSpeed: (rate: TimeRate) => set({ rate }),
   startStop: () => set((state) => ({ isPaused: !state.isPaused })),

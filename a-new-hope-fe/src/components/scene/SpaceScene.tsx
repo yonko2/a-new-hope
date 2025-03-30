@@ -12,6 +12,7 @@ import StarsBackground from "./background/StarsBackground.tsx";
 import PanLimit from "./background/PanLimit.tsx";
 import Rocket from "./rocket/Rocket.tsx";
 import {useDeliveryStore} from "../../stores/deliveryStore.ts";
+import { useSimulationStore } from "../../stores/simulationStore.ts";
 
 const MARS_SIZE = 70;
 const EARTH_SIZE = 100;
@@ -21,6 +22,8 @@ const MARS_CENTER = new THREE.Vector3(0, 0, 0);
 
 const SpaceScene = () => {
   const controlsRef = useRef<ThreeOrbitControls>(null);
+
+  const population = useSimulationStore(state => state.summary.population)
 
   const mapMode = useSceneStore((state) => state.mapMode);
   const toggleIsRunningAnimation = useSceneStore(
@@ -118,7 +121,7 @@ const SpaceScene = () => {
 
   const dots = usePopulationSpreadStable({
     initialDotsCount: 5,
-    maxDots: 50_000,
+    maxDots: population,
     spreadDistance: 15,
     spreadRate: 500,
     intervalMs: 50,
