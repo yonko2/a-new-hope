@@ -8,6 +8,8 @@ import { useTimeStore } from "../../stores/timeStore";
 import { useSceneStore } from "../../stores/sceneStore";
 import { useDeliveryStore } from "../../stores/deliveryStore";
 import { DeliveryMenu } from "../delivery/DeliveryMenu";
+import { useSimulationStore } from "../../stores/simulationStore";
+import { ResetFlyout } from "./ResetFlyout";
 
 export const Overlay = memo(function Overlay() {
   const isPaused = useTimeStore((state) => state.isPaused);
@@ -23,13 +25,16 @@ export const Overlay = memo(function Overlay() {
     (state) => state.deliveryMenuShown
   );
 
+  const isResetShown = useSimulationStore(state => state.isResetShown)
+
   const hasProgress = useDeliveryStore((state) => state.progress !== undefined);
 
-  const speedButtonsStyle = { display: hasProgress ? 'none' : undefined };
+  const speedButtonsStyle = { display: hasProgress ? "none" : undefined };
 
   return (
     <div className="overlay">
       {isDeliveryMenuShown ? <DeliveryMenu /> : null}
+      {isResetShown ? <ResetFlyout /> : null}
 
       <div className="header">
         <div className="map-mode-button-container">

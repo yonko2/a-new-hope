@@ -18,6 +18,8 @@ type Summary = {
 type SimulationStore = {
   summary: Summary;
   setSummary: (data: Summary) => void;
+  isResetShown: boolean;
+  setIsResetShown: (flag: boolean) => void;
 };
 
 export const useSimulationStore = create<SimulationStore>((set) => ({
@@ -47,4 +49,6 @@ export const useSimulationStore = create<SimulationStore>((set) => ({
     births: 0,
   },
   setSummary: (data: Summary) => set(() => ({ summary: data })),
+  isResetShown: false,
+  setIsResetShown: (flag) => set(() => ({ isResetShown: flag })),
 }));

@@ -6,11 +6,13 @@ import { API_URL } from "../constants/api";
 
 export function useTimeUpdater() {
   const isPaused = useTimeStore((state) => state.isPaused);
+  const startStop = useTimeStore((state) => state.startStop);
 
   const rate = useTimeStore((state) => state.rate);
   const goAtNextDay = useTimeStore((state) => state.goAtNextDay);
 
   const setSummary = useSimulationStore((state) => state.setSummary);
+  const setIsResetShown = useSimulationStore((state) => state.setIsResetShown);
 
   const intervalRef = useRef<number | null>(null);
   const isRequestMade = useRef<boolean>(false);
@@ -21,11 +23,23 @@ export function useTimeUpdater() {
 
       fetch(`${API_URL}/simulate`)
         .then((data) => data.json())
-        .then((data) => setSummary(data))
+        .then((data) => {
+          setSummary(data);
+          return data;
+        })
+        .then((data) => {
+          if (data?.["population"] === 0) {
+            setIsResetShown(true);
+
+            if (!isPaused) {
+              startStop();
+            }
+          }
+        })
         .then(goAtNextDay)
         .finally(() => (isRequestMade.current = false));
     }
-  }, [setSummary, goAtNextDay]);
+  }, [setSummary, goAtNextDay, setIsResetShown, startStop]);
 
   useEffect(() => {
     if (isPaused && intervalRef.current) {

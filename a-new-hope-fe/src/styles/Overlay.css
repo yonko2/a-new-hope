@@ -129,7 +129,8 @@
   text-align: center;
 }
 
-.delivery-menu {
+.delivery-menu,
+.reset-flyout {
   display: flex;
   flex-direction: column;
   width: 20vw;
@@ -150,7 +151,8 @@
   display: flex;
 }
 
-.delivery-menu-title{
+.delivery-menu-title,
+.reset-flyout-title {
   margin-bottom: 0;
   margin-block-end: 0;
   text-align: center;
@@ -161,7 +163,8 @@
 }
 
 .switch-map-mode-button,
-.delivery-menu-confirm {
+.delivery-menu-confirm,
+.reset-flyout-button {
   font-family: "Poppins";
   background: none;
   height: 64px;
