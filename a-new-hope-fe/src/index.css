@@ -28,3 +28,10 @@
 .negative-fill {
   background-color: var(--negative);
 }
+
+.positive-color {
+  color: var(--positive);
+}
+.negative-color {
+  color: var(--negative);
+}

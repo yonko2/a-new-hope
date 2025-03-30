@@ -6,17 +6,24 @@ import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import Earth from "./planets/Earth.tsx";
 import PlanetWithDots from "./planets/PlanetWithDots.tsx";
-import { usePopulationSpreadStable } from "../../hooks/usePopulationSpread.tsx";
+import { usePopulationSpreadStable } from "../../hooks/usePopulationSpread";
 import { useSceneStore } from "../../stores/sceneStore.ts";
 import StarsBackground from "./background/StarsBackground.tsx";
 import PanLimit from "./background/PanLimit.tsx";
+import Rocket from "./rocket/Rocket.tsx";
+import {useDeliveryStore} from "../../stores/deliveryStore.ts";
+import { useSimulationStore } from "../../stores/simulationStore.ts";
 
-const INITIAL_TARGET = new THREE.Vector3(0, 0, 0);
 const MARS_SIZE = 70;
 const EARTH_SIZE = 100;
+const INITIAL_TARGET = new THREE.Vector3(0, 0, 0);
+const EARTH_CENTER = new THREE.Vector3(EARTH_SIZE * 4, 0, 0);
+const MARS_CENTER = new THREE.Vector3(0, 0, 0);
 
 const SpaceScene = () => {
   const controlsRef = useRef<ThreeOrbitControls>(null);
+
+  const population = useSimulationStore(state => state.summary.population)
 
   const mapMode = useSceneStore((state) => state.mapMode);
   const toggleIsRunningAnimation = useSceneStore(
@@ -26,7 +33,6 @@ const SpaceScene = () => {
   const [savedOrbitPos, setSavedOrbitPos] = useState<THREE.Vector3 | null>(
     null
   );
-  const [sceneRef, setSceneRef] = useState<THREE.Scene | null>(null);
 
   const onToggleMode = useCallback(() => {
     if (!controlsRef.current) return;
@@ -113,28 +119,26 @@ const SpaceScene = () => {
 
   useEffect(onToggleMode, [onToggleMode]);
 
-  const earthCenter = new THREE.Vector3(EARTH_SIZE * 4, 0, 0); // Earth is at [200, 0, 0]
-  const marsCenter = new THREE.Vector3(0, 0, 0);
-
   const dots = usePopulationSpreadStable({
     initialDotsCount: 5,
-    maxDots: 50_000,
+    maxDots: population,
     spreadDistance: 15,
     spreadRate: 500,
     intervalMs: 50,
   });
+
+  const progress = useDeliveryStore(state => state.progress);
 
   return (
     <>
       <div style={{ width: "100vw", height: "100vh", position: "absolute" }}>
         <Canvas
           camera={{
-            position: [0, 0, MARS_SIZE * 3],
+            position: [0, 0, MARS_SIZE * 3.25],
             fov: 50,
             near: 0.1,
             far: 10000,
           }}
-          onCreated={({ scene }) => setSceneRef(scene)}
         >
           <ambientLight intensity={0.7} />
           <directionalLight intensity={0.8} position={[5, 5, 5]} />
@@ -158,12 +162,14 @@ const SpaceScene = () => {
           />
 
           <PanLimit
-              controlsRef={controlsRef}
-              minX={-500}
-              minY={-500}
-              maxX={800}
-              maxY={500}
+            controlsRef={controlsRef}
+            minX={-500}
+            minY={-500}
+            maxX={800}
+            maxY={500}
           />
+
+          { mapMode == 'plane' && progress && <Rocket earthCenter={EARTH_CENTER} marsCenter={MARS_CENTER} /> }
         </Canvas>
       </div>
     </>

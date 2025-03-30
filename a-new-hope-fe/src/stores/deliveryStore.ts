@@ -1,19 +1,26 @@
 import { create } from "zustand";
 import { DaysTillDeliveryEvent } from "../constants/delivery";
+import { ResourceType } from "../types/resources";
 
-export const DeliveryDaysTotal = 30;
+export const DeliveryDaysTotal = 20;
 
 type DeliveryStore = {
   progress: number | undefined;
   daysTillNextRocket: number | undefined;
+  deliveryMenuShown: boolean;
+  resources: Record<ResourceType, number>;
   sendRocket: () => void;
   updateProgress: () => void;
   updateDaysTillNextRocket: () => void;
+  setDeliveryMenuShown: (isShown: boolean) => void;
+  setResource: (resource: ResourceType, value: number) => void;
 };
 
 export const useDeliveryStore = create<DeliveryStore>((set) => ({
   progress: undefined,
   daysTillNextRocket: DaysTillDeliveryEvent,
+  deliveryMenuShown: false,
+  resources: { Food: 0, Water: 0, Air: 0 },
   sendRocket: () => set({ progress: 0 }),
   updateProgress: () => {
     return set((state) => {
@@ -45,4 +52,8 @@ export const useDeliveryStore = create<DeliveryStore>((set) => ({
         daysTillNextRocket,
       };
     }),
+  setDeliveryMenuShown: (isShown: boolean) =>
+    set(() => ({ deliveryMenuShown: isShown })),
+  setResource: (resource, value) =>
+    set((state) => ({ resources: { ...state.resources, [resource]: value } })),
 }));

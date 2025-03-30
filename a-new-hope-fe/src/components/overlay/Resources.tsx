@@ -1,12 +1,15 @@
 import { memo } from "react";
-import { resources } from "../../constants/resources";
 import { Resource } from "./Resource";
+import { useSimulationStore } from "../../stores/simulationStore";
+import { ResourceType } from "../../types/resources";
 
 export const Resources = memo(function Resources() {
+  const resources = useSimulationStore((state) => state.summary.resourceRatio);
+
   return (
     <div className="resources">
-      {resources.map((resource) => (
-        <Resource type={resource} availability={0.5} />
+      {Object.entries(resources).map(([type, availability]) => (
+        <Resource type={type as ResourceType} availability={availability} />
       ))}
     </div>
   );

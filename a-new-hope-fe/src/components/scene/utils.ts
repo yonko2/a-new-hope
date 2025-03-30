@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { TubeGeometry, CatmullRomCurve3, Mesh, MeshStandardMaterial } from "three";
 import { gsap } from "gsap";
 
-const latLongToCartesian = (lat: number, lon: number, radius: number) => {
+export function latLongToCartesian(lat: number, lon: number, radius: number) {
     const phi = (90 - lat) * (Math.PI / 180)
     const theta = (lon + 180) * (Math.PI / 180)
     const x = - (radius * Math.sin(phi) * Math.cos(theta))
@@ -27,9 +27,8 @@ export function sendCurvedArrow(
 
     if (!scene) return;
 
-    let start: THREE.Vector3, end: THREE.Vector3;
-    start = earthCenter.clone().lerp(marsCenter, fromPercent);
-    end = earthCenter.clone().lerp(marsCenter, toPercent);
+    const start = earthCenter.clone().lerp(marsCenter, fromPercent);
+    const end = earthCenter.clone().lerp(marsCenter, toPercent);
 
     const mid = start.clone().lerp(end, 0.5);
     const segmentDistance = start.distanceTo(end);
@@ -82,6 +81,3 @@ export function sendCurvedArrow(
         }
     });
 }
-
-
-export default latLongToCartesian

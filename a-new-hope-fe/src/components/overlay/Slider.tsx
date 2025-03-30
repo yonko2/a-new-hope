@@ -17,19 +17,7 @@ export const Slider = memo(function Slider(props: {
           : closest,
       0
     );
-    props.setCurrentStep(closestIndex);
-  };
-
-  const goPrevious = () => {
-    if (props.currentStep > 0) {
-      props.setCurrentStep(props.currentStep - 1);
-    }
-  };
-
-  const goNext = () => {
-    if (props.currentStep < props.steps.length - 1) {
-      props.setCurrentStep(props.currentStep + 1);
-    }
+    props.setCurrentStep(props.steps[closestIndex]);
   };
 
   return (
@@ -43,17 +31,6 @@ export const Slider = memo(function Slider(props: {
         step="1"
         style={{ flexGrow: 1 }}
       />
-      {/* <div className="slider-arrows">
-        <button onClick={goPrevious} disabled={props.currentStep === 0}>
-          &#8592;
-        </button>
-        <button
-          onClick={goNext}
-          disabled={props.currentStep === props.steps.length - 1}
-        >
-          &#8594;
-        </button>
-      </div> */}
     </div>
   );
 });

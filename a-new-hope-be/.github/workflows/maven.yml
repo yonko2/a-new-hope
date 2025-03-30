@@ -1,0 +1,30 @@
+# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven
+
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+name: Java CI with Maven
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Deploy to Heroku
+      uses: AkhileshNS/heroku-deploy@v3.14.15
+      with:
+        # This will be used for authentication. You can find it in your heroku homepage account settings
+        heroku_api_key: HRKU-bc6a0599-cb7a-469e-a0f7-f41ac37b6cf8
+        # Email that you use with heroku
+        heroku_email: kiril.georgiev2003gmail.com
+        # The appname to use for deploying/updating
+        heroku_app_name: a-new-hope-be
