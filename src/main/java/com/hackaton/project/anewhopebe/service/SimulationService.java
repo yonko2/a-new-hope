@@ -1,6 +1,9 @@
 package com.hackaton.project.anewhopebe.service;
 
 import com.hackaton.project.anewhopebe.data.SimulationInfo;
+import com.hackaton.project.anewhopebe.data.resources.Air;
+import com.hackaton.project.anewhopebe.data.resources.Food;
+import com.hackaton.project.anewhopebe.data.resources.Water;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +22,7 @@ public class SimulationService {
                     0,
                     0,
                     0,
-                    Map.of("Water", 0.0, "Food", 0.0, "Air", 0.0));
+                    Map.of(Water.NAME, 0.0, Food.NAME, 0.0, Air.NAME, 0.0));
         }
 
         return simulateDay();
