@@ -211,6 +211,7 @@ public class DeficiencyService {
 
     public void reset() {
         deficiencies.clear();
+        resourcesService.reset();
     }
 
 }

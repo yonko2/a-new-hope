@@ -12,15 +12,15 @@ import java.util.Map;
 public class ResourcesService {
     Map<String, Resource> INITIAL_RESOURCES = Map.of(Food.NAME, new Food(2_000_000L),
             Water.NAME, new Water(3_000_000L),
-            Air.NAME, new Air(100_000_000L));
+            Air.NAME, new Air(10_000_000L));
     Map<String, Resource> resources = INITIAL_RESOURCES;
 
     public Resource getResource(String name) {
         return resources.get(name);
     }
 
-    public long decreaseResourceVolume(String name, long volume) {
-        return resources.get(name).decreaseVolume(volume);
+    public long decreaseResourceVolume(String name, long peopleToFeed) {
+        return resources.get(name).decreaseVolume(peopleToFeed);
     }
 
     public void increaseResourceVolume(String name, long volume) {

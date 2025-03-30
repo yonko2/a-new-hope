@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.Map;
 
-@Controller("api/v1")
+@Controller
 public class SimulationController {
 
     @Autowired
