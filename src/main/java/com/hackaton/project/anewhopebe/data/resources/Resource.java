@@ -1,4 +1,4 @@
-package com.hackaton.project.anewhopebe.data;
+package com.hackaton.project.anewhopebe.data.resources;
 
 public abstract class Resource {
 

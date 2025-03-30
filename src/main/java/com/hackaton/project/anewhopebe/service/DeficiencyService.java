@@ -1,7 +1,7 @@
 package com.hackaton.project.anewhopebe.service;
 
-import com.hackaton.project.anewhopebe.data.Deficiency;
-import com.hackaton.project.anewhopebe.data.DeficiencyGroup;
+import com.hackaton.project.anewhopebe.data.deficiency.Deficiency;
+import com.hackaton.project.anewhopebe.data.deficiency.DeficiencyGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

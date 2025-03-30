@@ -1,16 +1,16 @@
 package com.hackaton.project.anewhopebe.service;
 
-import com.hackaton.project.anewhopebe.data.Air;
-import com.hackaton.project.anewhopebe.data.Food;
-import com.hackaton.project.anewhopebe.data.Resource;
-import com.hackaton.project.anewhopebe.data.Water;
+import com.hackaton.project.anewhopebe.data.resources.Air;
+import com.hackaton.project.anewhopebe.data.resources.Food;
+import com.hackaton.project.anewhopebe.data.resources.Resource;
+import com.hackaton.project.anewhopebe.data.resources.Water;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
 @Service
 public class ResourcesService {
-    Map<String, Resource> INITIAL_RESOURCES = Map.of(Food.NAME, new Food(2_000_000L),
+    final static Map<String, Resource> INITIAL_RESOURCES = Map.of(Food.NAME, new Food(2_000_000L),
             Water.NAME, new Water(3_000_000L),
             Air.NAME, new Air(10_000_000L));
     Map<String, Resource> resources = INITIAL_RESOURCES;

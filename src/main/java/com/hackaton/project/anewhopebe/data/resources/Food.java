@@ -1,4 +1,4 @@
-package com.hackaton.project.anewhopebe.data;
+package com.hackaton.project.anewhopebe.data.resources;
 
 public class Food extends Resource {
     private static final long CONSUMPTION_PER_PERSON_FOR_A_DAY = 2;

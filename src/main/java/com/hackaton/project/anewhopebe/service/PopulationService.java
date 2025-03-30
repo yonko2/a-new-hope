@@ -1,6 +1,6 @@
 package com.hackaton.project.anewhopebe.service;
 
-import com.hackaton.project.anewhopebe.data.DeficiencyGroup;
+import com.hackaton.project.anewhopebe.data.deficiency.DeficiencyGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,8 +21,6 @@ public class PopulationService {
     ResourcesService resourcesStorage;
     @Autowired
     DeficiencyService deficiencyService;
-    @Autowired
-    private ResourcesService resourcesService;
 
     public PopulationService() {
         this.numberOfPeople = DEFAULT_POPULATION;
