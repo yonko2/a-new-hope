@@ -34,4 +34,8 @@ public class SimulationService {
     public void addRocketDeliveryResources(Map<String, Long> deliveredResources) {
         populationService.addDeliveryResources(deliveredResources);
     }
+
+    public void resetSimulation() {
+        populationService.reset();
+    }
 }

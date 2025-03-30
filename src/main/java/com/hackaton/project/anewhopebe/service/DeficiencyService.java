@@ -209,4 +209,8 @@ public class DeficiencyService {
                         .reduce(0L, Long::sum)));
     }
 
+    public void reset() {
+        deficiencies.clear();
+    }
+
 }

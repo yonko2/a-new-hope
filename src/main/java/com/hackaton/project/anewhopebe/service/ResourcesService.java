@@ -10,9 +10,10 @@ import java.util.Map;
 
 @Service
 public class ResourcesService {
-    Map<String, Resource> resources = Map.of(Food.NAME, new Food(600_000),
-            Water.NAME, new Water(900_000),
-            Air.NAME, new Air(3_000_000));
+    Map<String, Resource> INITIAL_RESOURCES = Map.of(Food.NAME, new Food(2_000_000L),
+            Water.NAME, new Water(3_000_000L),
+            Air.NAME, new Air(10_000_000L));
+    Map<String, Resource> resources = INITIAL_RESOURCES;
 
     public Resource getResource(String name) {
         return resources.get(name);
@@ -28,5 +29,9 @@ public class ResourcesService {
 
     public Map<String, Resource> getResources() {
         return resources;
+    }
+
+    public void reset() {
+        this.resources = INITIAL_RESOURCES;
     }
 }

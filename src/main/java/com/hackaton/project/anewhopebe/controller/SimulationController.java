@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.Map;
 
-@Controller("/api/v1")
+@Controller("api/v1")
 public class SimulationController {
 
     @Autowired
@@ -24,6 +24,12 @@ public class SimulationController {
     @PostMapping("/add-resources")
     public ResponseEntity<Void> addRocketDeliveryResources(Map<String, Long> deliveredResources) {
         simulationService.addRocketDeliveryResources(deliveredResources);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/reset")
+    public ResponseEntity<Void> resetSimulation() {
+        simulationService.resetSimulation();
         return ResponseEntity.ok().build();
     }
 

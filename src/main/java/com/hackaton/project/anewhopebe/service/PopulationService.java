@@ -72,11 +72,28 @@ public class PopulationService {
         return births;
     }
 
-    public Map<String, Double> getResourceRatio() {
+    public Map<String, Double>  getResourceRatio() {
         final Map<String, Long> numberOfPeoplePerResource = deficiencyService.getNumberOfPeoplePerResource();
-        return numberOfPeoplePerResource.entrySet()
+        final Map<String, Double> ratioMap = numberOfPeoplePerResource.entrySet()
                 .stream()
-                .map(e -> Map.entry(e.getKey(), e.getValue().doubleValue() / numberOfPeople))
+                .map(e -> {
+                    final double ratio = 1 - numberOfPeople == 0 ? 0 : e.getValue().doubleValue() / numberOfPeople;
+                    return Map.entry(e.getKey(), ratio);
+                })
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
+        resourcesStorage.getResources()
+                .keySet()
+                .stream()
+                .filter(key -> !ratioMap.containsKey(key))
+                .forEach(key -> ratioMap.put(key, 1d));
+        return ratioMap;
+    }
+
+    public void reset() {
+        this.numberOfPeople = DEFAULT_POPULATION;
+        this.numberOfPeopleWithoutDeficiency = DEFAULT_POPULATION;
+        resourcesStorage.reset();
+        deficiencyService.reset();
     }
 }
