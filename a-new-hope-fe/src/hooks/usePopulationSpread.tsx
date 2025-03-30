@@ -14,7 +14,6 @@ const randomLatitude = () => {
 
 const randomDotNear = (dot: Dot, spreadDistance: number): Dot => {
     let newLat = dot.lat + (Math.random() - 0.5) * spreadDistance;
-    // Clamp strictly within ±70°
     newLat = Math.min(Math.max(newLat, MIN_LATITUDE), MAX_LATITUDE);
 
     const newLon = dot.lon + (Math.random() - 0.5) * spreadDistance;
