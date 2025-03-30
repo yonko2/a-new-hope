@@ -1,74 +1,85 @@
 import { useEffect, useRef, useState } from "react";
 
 export interface Dot {
-  lat: number;
-  lon: number;
+    lat: number;
+    lon: number;
 }
 
 const MIN_LATITUDE = -80;
 const MAX_LATITUDE = 80;
 
 const randomLatitude = () => {
-  return Math.random() * (MAX_LATITUDE - MIN_LATITUDE) + MIN_LATITUDE;
+    return Math.random() * (MAX_LATITUDE - MIN_LATITUDE) + MIN_LATITUDE;
 };
 
 const randomDotNear = (dot: Dot, spreadDistance: number): Dot => {
-  let newLat = dot.lat + (Math.random() - 0.5) * spreadDistance;
-  // Clamp strictly within ±70°
-  newLat = Math.min(Math.max(newLat, MIN_LATITUDE), MAX_LATITUDE);
+    let newLat = dot.lat + (Math.random() - 0.5) * spreadDistance;
+    newLat = Math.min(Math.max(newLat, MIN_LATITUDE), MAX_LATITUDE);
 
-  const newLon = dot.lon + (Math.random() - 0.5) * spreadDistance;
+    const newLon = dot.lon + (Math.random() - 0.5) * spreadDistance;
 
-  return {
-    lat: newLat,
-    lon: ((newLon + 180) % 360) - 180, // wrap lon within [-180,180]
-  };
+    return {
+        lat: newLat,
+        lon: ((newLon + 180) % 360) - 180, // wrap lon within [-180,180]
+    };
 };
 
-export const usePopulationSpreadStable = ({
-  initialDotsCount = 5,
-  maxDots = 50000,
-  spreadDistance = 2,
-  spreadRate = 100,
-  intervalMs = 200,
-}) => {
-  const [dots, setDots] = useState<Dot[]>([]);
-  const dotsRef = useRef<Dot[]>([]); // Stable reference to dots array
+interface IProps {
+    initialDotsCount: number;
+    maxDots: number;
+    spreadDistance: number;
+    spreadRate: number;
+    intervalMs: number;
+}
 
-  useEffect(() => {
-    const initialDots = Array.from({ length: initialDotsCount }, () => ({
-      lat: randomLatitude(),
-      lon: Math.random() * 360 - 180,
-    }));
-    dotsRef.current = initialDots;
-    setDots(initialDots);
-  }, [initialDotsCount]);
+export const usePopulationSpreadStable = (args: IProps) => {
+    const { initialDotsCount, maxDots, spreadDistance , spreadRate, intervalMs} = args;
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (dotsRef.current.length >= maxDots) {
-        clearInterval(interval);
-        return;
-      }
+    const [dots, setDots] = useState<Dot[]>([]);
+    const dotsRef = useRef<Dot[]>([]);
 
-      const newDots: Dot[] = [];
-      for (
-        let i = 0;
-        i < spreadRate && dotsRef.current.length + newDots.length < maxDots;
-        i++
-      ) {
-        const parentDot =
-          dotsRef.current[Math.floor(Math.random() * dotsRef.current.length)];
-        newDots.push(randomDotNear(parentDot, spreadDistance));
-      }
+    useEffect(() => {
+        const initialDots = Array.from({ length: initialDotsCount }, () => ({
+            lat: randomLatitude(),
+            lon: Math.random() * 360 - 180,
+        }));
+        dotsRef.current = initialDots;
+        setDots(initialDots);
+    }, [initialDotsCount]);
 
-      // Append new dots without recreating the old ones
-      dotsRef.current = [...dotsRef.current, ...newDots];
-      setDots(dotsRef.current);
-    }, intervalMs);
+    useEffect(() => {
+        const interval = setInterval(() => {
+            const currentCount = dotsRef.current.length;
 
-    return () => clearInterval(interval);
-  }, [maxDots, spreadDistance, spreadRate, intervalMs]);
+            if (currentCount < maxDots) {
+                // Gradually add dots
+                const dotsToAddCount = Math.min(spreadRate, maxDots - currentCount);
+                const newDots: Dot[] = [];
 
-  return dots;
+                for (let i = 0; i < dotsToAddCount; i++) {
+                    const parentDot = dotsRef.current[Math.floor(Math.random() * dotsRef.current.length)];
+                    newDots.push(randomDotNear(parentDot, spreadDistance));
+                }
+
+                dotsRef.current = [...dotsRef.current, ...newDots];
+                setDots([...dotsRef.current]);
+            }
+            else if (currentCount > maxDots) {
+                // Gradually remove dots randomly, mimicking addition
+                const dotsToRemoveCount = Math.min(spreadRate, currentCount - maxDots);
+                const indicesToRemove = new Set<number>();
+
+                while (indicesToRemove.size < dotsToRemoveCount) {
+                    indicesToRemove.add(Math.floor(Math.random() * dotsRef.current.length));
+                }
+
+                dotsRef.current = dotsRef.current.filter((_, idx) => !indicesToRemove.has(idx));
+                setDots([...dotsRef.current]);
+            }
+        }, intervalMs);
+
+        return () => clearInterval(interval);
+    }, [maxDots, spreadDistance, spreadRate, intervalMs]);
+
+    return dots;
 };
