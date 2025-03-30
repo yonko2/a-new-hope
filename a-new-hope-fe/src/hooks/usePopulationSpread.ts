@@ -45,19 +45,19 @@ export const usePopulationSpreadStable = (args: IProps) => {
         }));
         dotsRef.current = initialDots;
         setDots(initialDots);
-    }, [initialDotsCount]);
+    }, [initialDotsCount, maxDots === 0]);
 
     useEffect(() => {
         const interval = setInterval(() => {
             const currentCount = dotsRef.current.length;
 
-            if (currentCount < maxDots) {
-                // Gradually add dots
+            if (currentCount <= maxDots) {
                 const dotsToAddCount = Math.min(spreadRate, maxDots - currentCount);
                 const newDots: Dot[] = [];
 
                 for (let i = 0; i < dotsToAddCount; i++) {
                     const parentDot = dotsRef.current[Math.floor(Math.random() * dotsRef.current.length)];
+                    if (!parentDot) break;
                     newDots.push(randomDotNear(parentDot, spreadDistance));
                 }
 
@@ -65,7 +65,6 @@ export const usePopulationSpreadStable = (args: IProps) => {
                 setDots([...dotsRef.current]);
             }
             else if (currentCount > maxDots) {
-                // Gradually remove dots randomly, mimicking addition
                 const dotsToRemoveCount = Math.min(spreadRate, currentCount - maxDots);
                 const indicesToRemove = new Set<number>();
 
