@@ -14,6 +14,7 @@ type DeliveryStore = {
   updateDaysTillNextRocket: () => void;
   setDeliveryMenuShown: (isShown: boolean) => void;
   setResource: (resource: ResourceType, value: number) => void;
+  resetResources: () => void;
 };
 
 export const useDeliveryStore = create<DeliveryStore>((set) => ({
@@ -56,4 +57,12 @@ export const useDeliveryStore = create<DeliveryStore>((set) => ({
     set(() => ({ deliveryMenuShown: isShown })),
   setResource: (resource, value) =>
     set((state) => ({ resources: { ...state.resources, [resource]: value } })),
+  resetResources: () =>
+    set(() => ({
+      resources: {
+        Air: 0,
+        Water: 0,
+        Food: 0,
+      },
+    })),
 }));

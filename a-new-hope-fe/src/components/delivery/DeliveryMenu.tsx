@@ -22,6 +22,7 @@ export const DeliveryMenu = memo(function DeliveryMenu() {
 
   return (
     <div className="container delivery-menu">
+      <h3 className="delivery-menu-title">Allocate the space of the cargo</h3>
       <p>
         Total:&nbsp;
         <span

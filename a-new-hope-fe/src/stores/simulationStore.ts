@@ -28,19 +28,19 @@ export const useSimulationStore = create<SimulationStore>((set) => ({
         name: "Air",
         daysTillDeath: 0,
       },
-      Food: {
-        name: "Food",
-        daysTillDeath: 0,
-      },
       Water: {
         name: "Water",
         daysTillDeath: 0,
       },
+      Food: {
+        name: "Food",
+        daysTillDeath: 0,
+      },
     },
     resourceRatio: {
+      Water: 100,
       Air: 100,
       Food: 100,
-      Water: 100,
     },
     deathsFromNatural: 0,
     deathsFromStarvation: 0,

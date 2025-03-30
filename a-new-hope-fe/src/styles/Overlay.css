@@ -143,11 +143,17 @@
   background-color: #cfb3ac;
 
   position: relative;
-  bottom: -33vh;
+  bottom: -20vh;
 }
 
 .delivery-item {
   display: flex;
+}
+
+.delivery-menu-title{
+  margin-bottom: 0;
+  margin-block-end: 0;
+  text-align: center;
 }
 
 .map-mode-button-container {

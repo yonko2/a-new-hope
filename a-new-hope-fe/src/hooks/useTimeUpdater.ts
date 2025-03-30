@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef } from "react";
 import { useTimeStore } from "../stores/timeStore";
 import { useSimulationStore } from "../stores/simulationStore";
 import { DayInMs } from "../constants/time";
+import { API_URL } from "../constants/api";
 
 export function useTimeUpdater() {
   const isPaused = useTimeStore((state) => state.isPaused);
@@ -18,7 +19,7 @@ export function useTimeUpdater() {
     if (!isRequestMade.current) {
       isRequestMade.current = true;
 
-      fetch(`${import.meta.env["VITE_API_URL"]}/simulate`)
+      fetch(`${API_URL}/simulate`)
         .then((data) => data.json())
         .then((data) => setSummary(data))
         .then(goAtNextDay)

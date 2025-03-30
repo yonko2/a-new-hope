@@ -2,12 +2,14 @@ import { useEffect, useRef } from "react";
 import { useDeliveryStore } from "../stores/deliveryStore";
 import { useTimeStore } from "../stores/timeStore";
 import { useSceneStore } from "../stores/sceneStore";
+import { API_URL } from "../constants/api";
 
 export function useDeliveryUpdater() {
   const daysElapsed = useTimeStore((state) => state.daysElapsed);
 
   const progress = useDeliveryStore((state) => state.progress);
   const updateProgress = useDeliveryStore((state) => state.updateProgress);
+  const resetResources = useDeliveryStore((state) => state.resetResources);
 
   const mapMode = useSceneStore((state) => state.mapMode);
   const switchMapMode = useSceneStore((state) => state.switchMapMode);
@@ -28,10 +30,12 @@ export function useDeliveryUpdater() {
         switchMapMode();
       }
 
-      fetch(`${import.meta.env["VITE_API_URL"]}/add-resources`, {
+      fetch(`${API_URL}/add-resources`, {
         method: "POST",
         body: JSON.stringify(resources),
       });
+
+      resetResources();
     }
 
     isAfterInitialRender.current = true;
