@@ -1,9 +1,12 @@
 import { memo } from "react";
-import { ResourceSchema } from "../../types/resources";
+import { ResourceType } from "../../types/resources";
 import { ProgressBar } from "./ProgressBar";
 import { ResourceIcon } from "../shared/ResourceIcon";
 
-export const Resource = memo(function Resource(props: ResourceSchema) {
+export const Resource = memo(function Resource(props: {
+  type: ResourceType;
+  availability: number;
+}) {
   return (
     <div className="container resource">
       <ResourceIcon type={props.type} />

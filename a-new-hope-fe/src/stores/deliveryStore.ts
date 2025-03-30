@@ -20,7 +20,7 @@ export const useDeliveryStore = create<DeliveryStore>((set) => ({
   progress: undefined,
   daysTillNextRocket: DaysTillDeliveryEvent,
   deliveryMenuShown: false,
-  resources: { food: 0, water: 0, oxygen: 0 },
+  resources: { Food: 0, Water: 0, Air: 0 },
   sendRocket: () => set({ progress: 0 }),
   updateProgress: () => {
     return set((state) => {

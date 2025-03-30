@@ -28,7 +28,7 @@ export function useDeliveryUpdater() {
         switchMapMode();
       }
 
-      fetch(`${import.meta.env["VITE_API_URL"]}/delivery`, {
+      fetch(`${import.meta.env["VITE_API_URL"]}/add-resources`, {
         method: "POST",
         body: JSON.stringify(resources),
       });

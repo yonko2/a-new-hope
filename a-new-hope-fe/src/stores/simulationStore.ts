@@ -1,18 +1,15 @@
 import { create } from "zustand";
+import { ResourceType } from "../types/resources";
 
 type ResourceResponse = {
-  volume: number;
   name: string;
   daysTillDeath: number;
 };
 
 type Summary = {
   population: number;
-  resources: {
-    Air: ResourceResponse;
-    Food: ResourceResponse;
-    Water: ResourceResponse;
-  };
+  resources: Record<ResourceType, ResourceResponse>;
+  resourceRatio: Record<ResourceType, number>;
   deathsFromNatural: number;
   deathsFromStarvation: number;
   births: number;
@@ -28,20 +25,22 @@ export const useSimulationStore = create<SimulationStore>((set) => ({
     population: 0,
     resources: {
       Air: {
-        volume: 0,
         name: "Air",
         daysTillDeath: 0,
       },
       Food: {
-        volume: 0,
         name: "Food",
         daysTillDeath: 0,
       },
       Water: {
-        volume: 0,
         name: "Water",
         daysTillDeath: 0,
       },
+    },
+    resourceRatio: {
+      Air: 100,
+      Food: 100,
+      Water: 100,
     },
     deathsFromNatural: 0,
     deathsFromStarvation: 0,

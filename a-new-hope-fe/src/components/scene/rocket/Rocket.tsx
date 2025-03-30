@@ -10,7 +10,7 @@ import {
 } from "three";
 import { gsap } from "gsap";
 import { DeliveryDaysTotal } from "../../../stores/deliveryStore.ts";
-import { DayInMs } from "../../../hooks/useTimeUpdater.ts";
+import { DayInMs } from "../../../constants/time.ts";
 import { useTimeStore } from "../../../stores/timeStore.ts";
 
 interface RocketProps {

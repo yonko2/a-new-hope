@@ -46,5 +46,5 @@ function useEmitEvent() {
 
     setDeliveryMenuShown(true);
     sendRocket();
-  }, [isPaused, startStop, sendRocket]);
+  }, [isPaused, startStop, sendRocket, setDeliveryMenuShown]);
 }

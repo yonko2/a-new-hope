@@ -1,7 +1,1 @@
-export type ResourceType = "water" | "oxygen" | "food";
-
-export type ResourceSchema = {
-  type: ResourceType;
-  availability: number;
-  // quantity: number
-};
+export type ResourceType = "Water" | "Air" | "Food";
