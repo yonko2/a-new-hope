@@ -5,7 +5,8 @@ import { useTimeUpdater } from "./hooks/useTimeUpdater.ts";
 import { useDeliveryEventEmitter } from "./hooks/useDeliveryEventEmitter.ts";
 import { useDeliveryUpdater } from "./hooks/useDeliveryUpdater.ts";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { memo } from "react";
+import { memo, useEffect } from "react";
+import { API_URL } from "./constants/api.ts";
 
 function App() {
   const queryClient = new QueryClient();
@@ -23,6 +24,13 @@ const Listeners = memo(function Listeners() {
   useTimeUpdater();
   useDeliveryUpdater();
   useDeliveryEventEmitter();
+
+  useEffect(() => {
+    fetch(`${API_URL}/reset`, {
+      body: null,
+      method: "POST",
+    });
+  }, []);
 
   return null;
 });
