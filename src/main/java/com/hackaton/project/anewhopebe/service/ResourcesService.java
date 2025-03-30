@@ -32,6 +32,8 @@ public class ResourcesService {
     }
 
     public void reset() {
-        this.resources = INITIAL_RESOURCES;
+        this.resources.get(Food.NAME).increaseVolume(2_000_000L);
+        this.resources.get(Water.NAME).increaseVolume(3_000_000L);
+        this.resources.get(Air.NAME).increaseVolume(10_000_000L);
     }
 }

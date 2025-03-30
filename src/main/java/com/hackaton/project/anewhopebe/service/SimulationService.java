@@ -13,6 +13,10 @@ public class SimulationService {
     private PopulationService populationService;
 
     public SimulationInfo getSimulationInfo() {
+        if (populationService.getNumberOfPeople() <= 0) {
+            return new SimulationInfo(0, populationService.resourcesStorage.getResources(), 0, 0, 0, Map.of());
+        }
+
         return simulateDay();
     }
 
