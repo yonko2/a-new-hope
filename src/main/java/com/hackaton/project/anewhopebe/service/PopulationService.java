@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class PopulationService {
+    public static final long CARGO_CAPACITY = 1_000_000;
     public static final double BIRTH_RATE_PER_DAY = 0.004;
     public static final double DEATH_RATE_PER_DAY = 0.001;
     private static final long DEFAULT_POPULATION = 10_000;
@@ -20,6 +21,8 @@ public class PopulationService {
     ResourcesService resourcesStorage;
     @Autowired
     DeficiencyService deficiencyService;
+    @Autowired
+    private ResourcesService resourcesService;
 
     public PopulationService() {
         this.numberOfPeople = DEFAULT_POPULATION;
@@ -57,7 +60,7 @@ public class PopulationService {
     }
 
     public void addDeliveryResources(Map<String, Long> resourcesToBeAdded) {
-        resourcesToBeAdded.forEach(resourcesStorage::increaseResourceVolume);
+        resourcesToBeAdded.forEach((key, value) -> resourcesStorage.increaseResourceVolume(key, Math.round(CARGO_CAPACITY * value.doubleValue() / 100)));
     }
 
     public long deathsFromNaturalCauses() {
@@ -77,7 +80,10 @@ public class PopulationService {
         final Map<String, Double> ratioMap = numberOfPeoplePerResource.entrySet()
                 .stream()
                 .map(e -> {
-                    final double ratio = 1 - numberOfPeople == 0 ? 0 : e.getValue().doubleValue() / numberOfPeople;
+                    if (numberOfPeople == 0) {
+                        return Map.entry(e.getKey(), 0d);
+                    }
+                    final double ratio = e.getValue().doubleValue() / numberOfPeople;
                     return Map.entry(e.getKey(), ratio);
                 })
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
