@@ -12,7 +12,7 @@ import java.util.Map;
 public class ResourcesService {
     private static final long INITIAL_FOOD_VOLUME = 2_000_000L;
     private static final long INITIAL_WATER_VOLUME = 3_000_000L;
-    private static final long INITIAL_AIR_VOLUME = 10_000L;
+    private static final long INITIAL_AIR_VOLUME = 10_000_000L;
     private Map<String, Resource> resources;
 
     public ResourcesService() {
