@@ -1,7 +1,7 @@
 package com.hackaton.project.anewhopebe.service;
 
-import com.hackaton.project.anewhopebe.data.Deficiency;
-import com.hackaton.project.anewhopebe.data.DeficiencyGroup;
+import com.hackaton.project.anewhopebe.data.deficiency.Deficiency;
+import com.hackaton.project.anewhopebe.data.deficiency.DeficiencyGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -207,6 +207,11 @@ public class DeficiencyService {
                         .stream()
                         .map(DeficiencyGroup::numberOfPeople)
                         .reduce(0L, Long::sum)));
+    }
+
+    public void reset() {
+        deficiencies.clear();
+        resourcesService.reset();
     }
 
 }

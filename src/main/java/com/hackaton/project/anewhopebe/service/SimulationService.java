@@ -1,6 +1,9 @@
 package com.hackaton.project.anewhopebe.service;
 
 import com.hackaton.project.anewhopebe.data.SimulationInfo;
+import com.hackaton.project.anewhopebe.data.resources.Air;
+import com.hackaton.project.anewhopebe.data.resources.Food;
+import com.hackaton.project.anewhopebe.data.resources.Water;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +16,15 @@ public class SimulationService {
     private PopulationService populationService;
 
     public SimulationInfo getSimulationInfo() {
+        if (populationService.getNumberOfPeople() <= 0) {
+            return new SimulationInfo(0,
+                    populationService.resourcesStorage.getResources(),
+                    0,
+                    0,
+                    0,
+                    Map.of(Water.NAME, 0.0, Food.NAME, 0.0, Air.NAME, 0.0));
+        }
+
         return simulateDay();
     }
 
@@ -33,5 +45,9 @@ public class SimulationService {
 
     public void addRocketDeliveryResources(Map<String, Long> deliveredResources) {
         populationService.addDeliveryResources(deliveredResources);
+    }
+
+    public void resetSimulation() {
+        populationService.reset();
     }
 }

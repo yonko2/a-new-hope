@@ -1,6 +1,6 @@
 package com.hackaton.project.anewhopebe.service;
 
-import com.hackaton.project.anewhopebe.data.DeficiencyGroup;
+import com.hackaton.project.anewhopebe.data.deficiency.DeficiencyGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class PopulationService {
+    public static final long CARGO_CAPACITY = 1_000_000;
     public static final double BIRTH_RATE_PER_DAY = 0.004;
     public static final double DEATH_RATE_PER_DAY = 0.001;
     private static final long DEFAULT_POPULATION = 10_000;
@@ -57,7 +58,7 @@ public class PopulationService {
     }
 
     public void addDeliveryResources(Map<String, Long> resourcesToBeAdded) {
-        resourcesToBeAdded.forEach(resourcesStorage::increaseResourceVolume);
+        resourcesToBeAdded.forEach((key, value) -> resourcesStorage.increaseResourceVolume(key, Math.round(CARGO_CAPACITY * value.doubleValue() / 100)));
     }
 
     public long deathsFromNaturalCauses() {
@@ -72,11 +73,31 @@ public class PopulationService {
         return births;
     }
 
-    public Map<String, Double> getResourceRatio() {
+    public Map<String, Double>  getResourceRatio() {
         final Map<String, Long> numberOfPeoplePerResource = deficiencyService.getNumberOfPeoplePerResource();
-        return numberOfPeoplePerResource.entrySet()
+        final Map<String, Double> ratioMap = numberOfPeoplePerResource.entrySet()
                 .stream()
-                .map(e -> Map.entry(e.getKey(), e.getValue().doubleValue() / numberOfPeople))
+                .map(e -> {
+                    if (numberOfPeople == 0) {
+                        return Map.entry(e.getKey(), 0d);
+                    }
+                    final double ratio = 1 - e.getValue().doubleValue() / numberOfPeople;
+                    return Map.entry(e.getKey(), ratio);
+                })
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
+        resourcesStorage.getResources()
+                .keySet()
+                .stream()
+                .filter(key -> !ratioMap.containsKey(key))
+                .forEach(key -> ratioMap.put(key, 1d));
+        return ratioMap;
+    }
+
+    public void reset() {
+        this.numberOfPeople = DEFAULT_POPULATION;
+        this.numberOfPeopleWithoutDeficiency = DEFAULT_POPULATION;
+        resourcesStorage.reset();
+        deficiencyService.reset();
     }
 }
